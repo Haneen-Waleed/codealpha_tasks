@@ -9,7 +9,7 @@ class QuizScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: Colors.white,
       bottomNavigationBar: CustomBottomNavBar(selectedIndex: 2,),
       body: Center(child: Text('Quiz'),),
     );  }
