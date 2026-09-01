@@ -2,208 +2,259 @@ import 'package:flash_cards/bloc/flash_card_folder_bloc.dart';
 import 'package:flash_cards/features/cards/widgets/add_flash_card_folder_widget.dart';
 import 'package:flash_cards/features/cards/widgets/folder_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../../bloc/flash_cards_bloc.dart';
-import '../../../bloc/flash_cards_event.dart';
 import '../../../core/colors.dart';
 import '../../../core/custome_widgets/custome_bottom_nav_bar.dart';
 import '../../../models/folder_model.dart';
 import '../widgets/add_flash_card_widget.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+
 class CardScreen extends StatelessWidget {
   const CardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final myBox1 = Hive.box('Folders');
+    final foldersBox = Hive.box('Folders');
 
     return Scaffold(
+      backgroundColor: const Color(0xffFAFAFA),
+
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text('Card'),
-        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: false,
+        title: const Text(
+          'My Folders',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         actions: [
           PopupMenuButton<String>(
+            elevation: 4,
             color: Colors.white,
-            icon: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Icon(Icons.add),
+            icon: Icon(
+              Icons.add,
+              color: primary,
+              size: 28,
             ),
             onSelected: (value) {
               if (value == 'folder') {
                 dialogBuilderFolder(context);
-              } else if (value == 'card') {
-                if(myBox1.isNotEmpty){
+              }
+
+              if (value == 'card') {
+                if (foldersBox.isNotEmpty) {
                   dialogBuilder(context);
-                }
-                else{
+                } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       behavior: SnackBarBehavior.floating,
-                      backgroundColor: Colors.yellow.shade300,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      content:  Center(
-                        child: Text(
-                          "You must create folder first",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: primary,
-                          ),
-                        ),
+                      content: const Text(
+                        'Create a folder first',
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   );
                 }
               }
             },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
+            itemBuilder: (context) => const [
+              PopupMenuItem(
                 value: 'folder',
-                child: ListTile(
-                  leading: Icon(Icons.folder_outlined),
-                  title: Text('Create Folder'),
+                child: Row(
+                  children: [
+                    Icon(Icons.create_new_folder_outlined),
+                    SizedBox(width: 12),
+                    Text('New Folder'),
+                  ],
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'card',
-                child: ListTile(
-                  leading: Icon(Icons.style_outlined),
-                  title: Text('Create Card'),
+                child: Row(
+                  children: [
+                    Icon(Icons.style_outlined),
+                    SizedBox(width: 12),
+                    Text('New Card'),
+                  ],
                 ),
               ),
             ],
-          )
+          ),
+
+          const SizedBox(width: 8),
         ],
       ),
-      backgroundColor: Colors.white,
-      bottomNavigationBar: CustomBottomNavBar(selectedIndex: 1,),
+
+      bottomNavigationBar: const CustomBottomNavBar(
+        selectedIndex: 1,
+      ),
+
       body: BlocBuilder<FlashCardFolderBloc, FlashCardFolderState>(
         builder: (context, state) {
-          if (myBox1.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.assignment_outlined,
-                    size: 50,
-                    color: Colors.grey.shade400,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "No Folders Yet",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade700,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Tap + to create your first Folder",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
-                ],
-              ),
-            );
+          if (foldersBox.isEmpty) {
+            return _buildEmptyState(context);
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: myBox1.length + 1,
-            itemBuilder: (context, index) {
-              // Header
-              if (index == 0) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.style_outlined,
-                        color: Colors.blue.shade900,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                child: Row(
+                  children: [
+                    Text(
+                      '${foldersBox.length} folders',
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 14,
                       ),
-                      const SizedBox(width: 8),
+                    ),
 
-                      const Text(
-                        "Available Folders",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    const Spacer(),
+
+                    IconButton(
+                      onPressed: () {
+                        _deleteAllFolders(context);
+                      },
+                      icon: Icon(
+                        Icons.delete_outline,
+                        color: Colors.grey.shade600,
+                        size: 21,
                       ),
+                      tooltip: 'Delete all',
+                    ),
+                  ],
+                ),
+              ),
 
-                      const Spacer(),
-
-                      IconButton(
-                        tooltip: "Delete All",
-                        onPressed: () async {
-                          final confirm = await showDialog<bool>(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Delete all folders?'),
-                                content: const Text(
-                                  'Are you sure you want to delete all folders? This action cannot be undone.',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, false);
-                                    },
-                                    child:  Text('Cancel',style: TextStyle(color: primary,fontSize: 16),),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, true);
-                                    },
-                                    child:  Text('Delete',style: TextStyle(color: red,fontSize: 16)),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-
-                          if (confirm == true) {
-                            context
-                                .read<FlashCardFolderBloc>()
-                                .add(DeleteAllFlashCardFolderEvent());
-                          }
-                        },
-                        icon: Icon(
-                          Icons.delete_forever_outlined,
-                          color: red,
-                        ),
-                      ),
-                    ],
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
                   ),
-                );
-              }
+                  itemCount: foldersBox.length,
+                  itemBuilder: (context, index) {
+                    final item = Map<String, dynamic>.from(
+                      foldersBox.getAt(index),
+                    );
 
-              //folder
-              final folderIndex = index - 1;
+                    final folder = Folder(
+                      id: item['Id'],
+                      name: item['Title'],
+                    );
 
-              final item = Map<String, dynamic>.from(
-                myBox1.getAt(folderIndex),
-              );
-
-              final folder = Folder(
-                id: item['Id'],
-                name: item['Title'],
-              );
-
-              return FolderWidget(
-                folder: folder,
-                index: folderIndex,
-              );  },
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: FolderWidget(
+                        folder: folder,
+                        index: index,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
     );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.folder_open_outlined,
+              size: 56,
+              color: Colors.grey.shade400,
+            ),
+
+            const SizedBox(height: 16),
+
+            const Text(
+              'No folders yet',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            const SizedBox(height: 6),
+
+            Text(
+              'Create a folder to start organizing your flashcards.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey.shade500,
+                fontSize: 14,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            TextButton.icon(
+              onPressed: () {
+                dialogBuilderFolder(context);
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Create folder'),
+              style: TextButton.styleFrom(
+                foregroundColor: primary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _deleteAllFolders(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('Delete all folders?'),
+          content: const Text(
+            'All folders will be permanently deleted.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: primary),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: Text(
+                'Delete',
+                style: TextStyle(color: red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      context
+          .read<FlashCardFolderBloc>()
+          .add(DeleteAllFlashCardFolderEvent());
+    }
   }
 }

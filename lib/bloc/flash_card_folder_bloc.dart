@@ -8,6 +8,8 @@ part 'flash_card_folder_state.dart';
 class FlashCardFolderBloc extends Bloc<FlashCardFolderEvent, FlashCardFolderState> {
   FlashCardFolderBloc() : super(InitialFlashCardFolder()) {
     final myBox = Hive.box('Folders');
+    final cardsBox = Hive.box('FlashCards');
+
     on<AddFlashCardFolderEvent>((event, emit) {
       myBox.add({
         "Title": event.folder.name,
@@ -15,12 +17,34 @@ class FlashCardFolderBloc extends Bloc<FlashCardFolderEvent, FlashCardFolderStat
       });
       emit(AddFlashCardFolder());
     });
+
     on<DeleteFlashCardFolderEvent>((event, emit) {
+      final folderData = Map<String, dynamic>.from(myBox.getAt(event.index));
+      final String folderId = folderData["Id"]?.toString() ?? '';
+
+      final keysToDelete = <dynamic>[];
+      for (var key in cardsBox.keys) {
+        final cardData = Map<String, dynamic>.from(cardsBox.get(key));
+        if (cardData['FolderId']?.toString() == folderId) {
+          keysToDelete.add(key);
+        }
+      }
+
+      if (keysToDelete.isNotEmpty) {
+        cardsBox.deleteAll(keysToDelete);
+      }
+
+      // 4. نمسح الفولدر نفسه
       myBox.deleteAt(event.index);
+
       emit(DeleteFlashCardFolder());
     });
+
     on<DeleteAllFlashCardFolderEvent>((event, emit) {
+      // مسح كل الفولدرات وكل الكاردز
+      cardsBox.deleteAll(cardsBox.keys);
       myBox.deleteAll(myBox.keys);
+
       emit(DeleteAllFlashCardFolder());
     });
 

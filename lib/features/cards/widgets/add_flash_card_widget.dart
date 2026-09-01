@@ -90,36 +90,96 @@ Future<void> dialogBuilder(BuildContext context) {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Folder
-                    DropdownButtonFormField<String>(
-                      value: selectedFolderId,
-                      decoration: inputDecoration(
-                        hint: "Select Folder",
-                        icon: Icons.folder_outlined,
-                      ),
-                      items: foldersBox.values.map((folder) {
-                        final item =
-                        Map<String, dynamic>.from(folder);
+                  DropdownMenu<String>(
+                  width: 330,
+                  initialSelection: selectedFolderId,
 
-                        return DropdownMenuItem<String>(
-                          value: item['Id'],
-                          child: Text(
-                            item['Title'],
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedFolderId = value;
-                        });
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return "Please select a folder";
-                        }
-                        return null;
-                      },
+                  hintText: "Select Folder",
+
+                  leadingIcon: Icon(
+                    Icons.folder_outlined,
+                    color: primary,
+                  ),
+
+                  trailingIcon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: primary,
+                  ),
+
+                  selectedTrailingIcon: Icon(
+                    Icons.keyboard_arrow_up_rounded,
+                    color: primary,
+                  ),
+
+                  textStyle: TextStyle(
+                    color: Colors.grey.shade800,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+
+                  inputDecorationTheme: InputDecorationTheme(
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 18,
                     ),
+
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide.none,
+                    ),
+
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide.none,
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide(
+                        color: primary,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+
+                  menuStyle: MenuStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.white),
+
+                    elevation: const WidgetStatePropertyAll(8),
+
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+
+                    padding: const WidgetStatePropertyAll(
+                      EdgeInsets.symmetric(vertical: 8),
+                    ),
+                  ),
+
+                  dropdownMenuEntries: foldersBox.values.map((folder) {
+                    final item = Map<String, dynamic>.from(folder);
+
+                    return DropdownMenuEntry<String>(
+                      value: item['Id'],
+                      label: item['Title'],
+                      leadingIcon: Icon(
+                        Icons.folder_rounded,
+                        color: primary.withOpacity(0.7),
+                      ),
+                    );
+                  }).toList(),
+
+                  onSelected: (value) {
+                    setState(() {
+                      selectedFolderId = value;
+                    });
+                  },
+                ),
 
                     const SizedBox(height: 18),
 
