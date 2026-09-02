@@ -60,10 +60,10 @@ class HomeScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const ProfileScreen(),
+                                builder: (_) =>  ProfileScreen(),
                               ),
                             );
                           },

@@ -1,4 +1,5 @@
 import 'package:flash_cards/core/colors.dart';
+import 'package:flash_cards/core/custome_widgets/custom_button.dart';
 import 'package:flash_cards/core/custome_widgets/custome_bottom_nav_bar.dart';
 import 'package:flash_cards/features/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -196,32 +197,7 @@ class _QuizSetupScreenState extends State<QuizSetupScreen> {
               SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: ElevatedButton(
-                  onPressed: _startQuiz,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primary,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Start Quiz',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.2,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Icon(Icons.arrow_forward_rounded, size: 20),
-                    ],
-                  ),
-                ),
+                child: CustomButton(text: 'Start Quiz',onPressed: _startQuiz,)
               ),
             ],
           ),

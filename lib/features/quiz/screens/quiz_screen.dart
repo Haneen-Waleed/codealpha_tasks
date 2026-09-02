@@ -1,4 +1,5 @@
 import 'package:flash_cards/core/colors.dart';
+import 'package:flash_cards/core/custome_widgets/custom_button.dart';
 import 'package:flash_cards/features/quiz/screens/quiz_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -277,49 +278,35 @@ class _QuizScreenState extends State<QuizScreen> {
               SizedBox(
                 width: double.infinity,
                 height: 54,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primary,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                  onPressed: () {
-                    if (!isAnswered) {
-                      if (answerController.text.trim().isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text('Write your answer first.'),
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                        );
-                        return;
-                      }
+                child: CustomButton(onPressed: () {
+    if (!isAnswered) {
+    if (answerController.text.trim().isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+    content: const Text('Write your answer first.'),
+    behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+    ),
+    ),
+    );
+    return;
+    }
 
-                      context.read<QuizBloc>().add(
-                        CheckAnswerEvent(answerController.text),
-                      );
-                    } else {
-                      context.read<QuizBloc>().add(NextQuestionEvent());
+    context.read<QuizBloc>().add(
+    CheckAnswerEvent(answerController.text),
+    );
+    } else {
+    context.read<QuizBloc>().add(NextQuestionEvent());
 
-                      answerController.clear();
-                    }
-                  },
-                  child: Text(
-                    isAnswered
-                        ? (state.isLastQuestion ? 'Finish' : 'Next')
-                        : 'Check answer',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+    answerController.clear();
+    }
+    },
+    text: isAnswered
+        ? (state.isLastQuestion ? 'Finish' : 'Next')
+        : 'Check answer',
+    )
+                ,
               ),
             ],
           ),

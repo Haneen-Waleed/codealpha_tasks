@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flash_cards/core/colors.dart';
 
+import '../../../core/custome_widgets/custom_button.dart';
 import '../../../cubit/user_cubit.dart';
 import '../../home/screens/home_screen.dart';
 
@@ -46,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 8),
 
                 Text(
-                  'Track your study progress and save your decks locally.',
+                  'Create an account and make learning easier, \none card at a time',
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.grey.shade600,
@@ -72,7 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFormField(
                   controller: _nameController,
                   textCapitalization: TextCapitalization.words,
-                  decoration: _buildInputDecoration(hint: 'e.g. Alex Morgan'),
+                  decoration: _buildInputDecoration(hint: 'e.g. Haneen Waleed'),
                   validator: (v) =>
                   v == null || v.trim().isEmpty ? 'Name required' : null,
                 ),
@@ -97,7 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   obscureText: true,
                   decoration: _buildInputDecoration(hint: '••••••••'),
                   validator: (v) =>
-                  v == null || v.length < 4 ? 'At least 4 characters' : null,
+                  v == null || v.length < 8 ? 'At least 4 characters' : null,
                 ),
 
                 const Spacer(flex: 2),
@@ -106,38 +107,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 56,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primary,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<UserCubit>().registerUser(
-                          _nameController.text.trim(),
-                          _passwordController.text.trim(),
-                        );
+                  child: CustomButton(text: 'Get Started',onPressed:  () {
+                    if (_formKey.currentState!.validate()) {
+                      context.read<UserCubit>().registerUser(
+                        _nameController.text.trim(),
+                        _passwordController.text.trim(),
+                      );
 
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const HomeScreen(),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text(
-                      'Get Started',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const HomeScreen(),
+                        ),
+                      );
+                    }
+                  },)
                 ),
               ],
             ),

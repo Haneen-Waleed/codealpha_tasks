@@ -21,10 +21,6 @@ class ProfileScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: primary, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: const Text(
           'Profile',
           style: TextStyle(
@@ -109,15 +105,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    context.read<UserCubit>().logout();
-
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const RegisterScreen(),
-                      ),
-                          (route) => false,
-                    );
+                    _deleteAccount(context);
                   },
                   icon: const Icon(Icons.logout_rounded, size: 20),
                   label: const Text(
@@ -134,5 +122,51 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+  Future<void> _deleteAccount(BuildContext context) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('Delete Your Profile'),
+          content: const Text(
+            'All folders and Cards will be permanently deleted.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: primary),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              child: Text(
+                'Log Out',
+                style: TextStyle(color: red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      context
+          .read<UserCubit>().logout();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const RegisterScreen(),
+        ),
+            (route) => false,
+      );
+    }
   }
 }
