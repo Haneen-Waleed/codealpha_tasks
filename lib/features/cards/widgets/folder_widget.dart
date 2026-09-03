@@ -3,7 +3,7 @@ import 'package:flash_cards/features/cards/widgets/edit_flash_card_folder_widget
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flash_cards/core/colors.dart';
 import '../../../models/folder_model.dart';
 import '../screens/folder_cards_screen.dart';
@@ -12,11 +12,7 @@ class FolderWidget extends StatelessWidget {
   final Folder folder;
   final int index;
 
-  const FolderWidget({
-    super.key,
-    required this.folder,
-    required this.index,
-  });
+  const FolderWidget({super.key, required this.folder, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -27,27 +23,20 @@ class FolderWidget extends StatelessWidget {
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: Colors.grey.shade100,
-        ),
+        side: BorderSide(color: Colors.grey.shade100),
       ),
       child: InkWell(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => FolderCardsScreen(
-                folder: folder,
-              ),
+              builder: (_) => FolderCardsScreen(folder: folder),
             ),
           );
         },
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 14,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
             children: [
               // Folder icon
@@ -58,11 +47,14 @@ class FolderWidget extends StatelessWidget {
                   color: primary.withOpacity(0.08),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  Icons.folder_outlined,
-                  color: primary,
-                  size: 25,
-                ),
+                child: Icon(Icons.folder_rounded, color: primary, size: 30)
+                    .animate()
+                    .scale(
+                      begin: const Offset(0.85, 0.85),
+                      end: const Offset(1, 1),
+                      duration: 300.ms,
+                      curve: Curves.easeOutBack,
+                    ),
               ),
 
               const SizedBox(width: 14),
@@ -90,17 +82,10 @@ class FolderWidget extends StatelessWidget {
               PopupMenuButton<String>(
                 color: Colors.white,
                 padding: EdgeInsets.zero,
-                icon: Icon(
-                  Icons.more_horiz,
-                  color: Colors.grey.shade500,
-                ),
+                icon: Icon(Icons.more_horiz, color: Colors.grey.shade500),
                 onSelected: (value) {
                   if (value == 'edit') {
-                    dialogBuilderEditFolder(
-                      context,
-                      index,
-                      folder.name,
-                    );
+                    dialogBuilderEditFolder(context, index, folder.name);
                   }
 
                   if (value == 'delete') {
@@ -122,16 +107,9 @@ class FolderWidget extends StatelessWidget {
                     value: 'delete',
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.delete_outline,
-                          size: 20,
-                          color: red,
-                        ),
+                        Icon(Icons.delete_outline, size: 20, color: red),
                         const SizedBox(width: 10),
-                        Text(
-                          'Delete',
-                          style: TextStyle(color: red),
-                        ),
+                        Text('Delete', style: TextStyle(color: red)),
                       ],
                     ),
                   ),
@@ -140,11 +118,7 @@ class FolderWidget extends StatelessWidget {
 
               const SizedBox(width: 4),
 
-              Icon(
-                Icons.chevron_right,
-                color: Colors.grey.shade400,
-                size: 22,
-              ),
+              Icon(Icons.chevron_right, color: Colors.grey.shade400, size: 22),
             ],
           ),
         ),
@@ -159,27 +133,19 @@ class FolderWidget extends StatelessWidget {
         return AlertDialog(
           backgroundColor: Colors.white,
           title: const Text('Delete folder?'),
-          content: Text(
-            'Are you sure you want to delete "${folder.name}"?',
-          ),
+          content: Text('Are you sure you want to delete "${folder.name}"?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context, false);
               },
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: primary),
-              ),
+              child: Text('Cancel', style: TextStyle(color: primary)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },
-              child: Text(
-                'Delete',
-                style: TextStyle(color: red),
-              ),
+              child: Text('Delete', style: TextStyle(color: red)),
             ),
           ],
         );
@@ -187,9 +153,9 @@ class FolderWidget extends StatelessWidget {
     );
 
     if (confirm == true) {
-      context
-          .read<FlashCardFolderBloc>()
-          .add(DeleteFlashCardFolderEvent(index));
+      context.read<FlashCardFolderBloc>().add(
+        DeleteFlashCardFolderEvent(index),
+      );
     }
   }
 }

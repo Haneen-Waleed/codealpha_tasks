@@ -1,7 +1,7 @@
 import 'package:flash_cards/core/colors.dart';
 import 'package:flash_cards/core/custome_widgets/custom_button.dart';
 import 'package:flash_cards/core/custome_widgets/custome_bottom_nav_bar.dart';
-import 'package:flash_cards/features/home/screens/home_screen.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -44,12 +44,15 @@ class _QuizSetupScreenState extends State<QuizSetupScreen> {
       return Map<String, dynamic>.from(item);
     }).toList();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      bottomNavigationBar: const CustomBottomNavBar(selectedIndex: 2),
+
+      bottomNavigationBar: const CustomBottomNavBar(
+        selectedIndex: 2,
+      ),
+
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -63,42 +66,73 @@ class _QuizSetupScreenState extends State<QuizSetupScreen> {
           ),
         ),
       ),
+
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 12,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header text
+
+              // Header
               const Text(
                 'Configure Session',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                   letterSpacing: -0.5,
-                  color: Colors.black87,
+                  color: Colors.black,
                 ),
+              )
+                  .animate()
+                  .fadeIn(duration: 400.ms)
+                  .slideX(
+                begin: -0.06,
+                end: 0,
+                duration: 400.ms,
+                curve: Curves.easeOut,
               ),
-              const SizedBox(height: 4),
+
+              const SizedBox(height: 5),
+
               Text(
                 'Set your time limit and question pool to get started.',
                 style: TextStyle(
                   color: Colors.grey.shade600,
                   fontSize: 14,
                 ),
+              )
+                  .animate()
+                  .fadeIn(
+                delay: 100.ms,
+                duration: 400.ms,
               ),
-              const SizedBox(height: 32),
+
+              const SizedBox(height: 30),
 
               Expanded(
                 child: ListView(
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    // Section: Duration
-                    _buildLabel('DURATION'),
+
+                    // Duration
+                    _buildLabel('DURATION')
+                        .animate()
+                        .fadeIn(
+                      delay: 150.ms,
+                      duration: 350.ms,
+                    ),
+
                     const SizedBox(height: 10),
+
                     DropdownButtonFormField<int>(
                       value: selectedMinutes,
-                      icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                      ),
                       decoration: _inputDecoration(
                         hint: 'Select duration',
                         icon: Icons.timer_outlined,
@@ -124,15 +158,31 @@ class _QuizSetupScreenState extends State<QuizSetupScreen> {
                           });
                         }
                       },
+                    )
+                        .animate()
+                        .fadeIn(
+                      delay: 200.ms,
+                      duration: 400.ms,
+                    )
+                        .slideY(
+                      begin: 0.06,
+                      end: 0,
+                      duration: 400.ms,
+                      curve: Curves.easeOut,
                     ),
 
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 30),
 
-                    // Section: Source selection
-                    _buildLabel('QUESTION SOURCE'),
+                    // Question source
+                    _buildLabel('QUESTION SOURCE')
+                        .animate()
+                        .fadeIn(
+                      delay: 250.ms,
+                      duration: 350.ms,
+                    ),
+
                     const SizedBox(height: 10),
 
-                    // Segmented Toggle Control
                     Container(
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
@@ -157,13 +207,27 @@ class _QuizSetupScreenState extends State<QuizSetupScreen> {
                           ),
                         ],
                       ),
+                    )
+                        .animate()
+                        .fadeIn(
+                      delay: 300.ms,
+                      duration: 400.ms,
+                    )
+                        .slideY(
+                      begin: 0.06,
+                      end: 0,
+                      duration: 400.ms,
+                      curve: Curves.easeOut,
                     ),
 
                     if (selectedSource == 'folder') ...[
                       const SizedBox(height: 16),
+
                       DropdownButtonFormField<String>(
                         value: selectedFolderId,
-                        icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                        icon: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                        ),
                         decoration: _inputDecoration(
                           hint: 'Select Folder',
                           icon: Icons.folder_open_rounded,
@@ -187,17 +251,43 @@ class _QuizSetupScreenState extends State<QuizSetupScreen> {
                             selectedFolderId = value;
                           });
                         },
+                      )
+                          .animate()
+                          .fadeIn(
+                        duration: 300.ms,
+                      )
+                          .slideY(
+                        begin: -0.04,
+                        end: 0,
+                        duration: 300.ms,
+                        curve: Curves.easeOut,
                       ),
                     ],
                   ],
                 ),
               ),
 
-              // Action Button
+              const SizedBox(height: 12),
+
+              // Start button
               SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: CustomButton(text: 'Start Quiz',onPressed: _startQuiz,)
+                child: CustomButton(
+                  text: 'Start Quiz',
+                  onPressed: _startQuiz,
+                ),
+              )
+                  .animate()
+                  .fadeIn(
+                delay: 400.ms,
+                duration: 400.ms,
+              )
+                  .slideY(
+                begin: 0.08,
+                end: 0,
+                duration: 400.ms,
+                curve: Curves.easeOut,
               ),
             ],
           ),
@@ -229,43 +319,63 @@ class _QuizSetupScreenState extends State<QuizSetupScreen> {
       onTap: () {
         setState(() {
           selectedSource = value;
+
           if (value == 'random') {
             selectedFolderId = null;
           }
         });
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 12),
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
+        padding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 8,
+        ),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
+          color: isSelected
+              ? Colors.white
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           boxShadow: isSelected
               ? [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
+              color: Colors.black.withOpacity(0.035),
+              blurRadius: 7,
               offset: const Offset(0, 2),
             ),
           ]
-              : [],
+              : null,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 18,
-              color: isSelected ? primary : Colors.grey.shade600,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? Colors.black87 : Colors.grey.shade600,
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 180),
+              child: Icon(
+                icon,
+                key: ValueKey('$value-$isSelected'),
+                size: 18,
+                color: isSelected
+                    ? primary
+                    : Colors.grey.shade600,
               ),
+            ),
+
+            const SizedBox(width: 7),
+
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 180),
+              style: TextStyle(
+                fontSize: 13.5,
+                fontWeight: isSelected
+                    ? FontWeight.w700
+                    : FontWeight.w500,
+                color: isSelected
+                    ? Colors.black87
+                    : Colors.grey.shade600,
+              ),
+              child: Text(title),
             ),
           ],
         ),

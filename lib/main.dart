@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:path_provider/path_provider.dart'; // 1. أضيفي هذا الـ Import
+import 'package:path_provider/path_provider.dart';
+
+import 'features/splash/screens/splash_screen.dart'; // 1. أضيفي هذا الـ Import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,17 +49,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => QuizBloc()),
         BlocProvider(create: (context) => UserCubit()),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Builder(
-          builder: (context) {
-            final isLoggedIn = context.select(
-                  (UserCubit cubit) => cubit.state.isLoggedIn,
-            );
-            return isLoggedIn ? const HomeScreen() : const RegisterScreen();
-          },
-        ),
-      ),
+      child:  MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const SplashScreen(),
+    )
     );
   }
 }

@@ -140,10 +140,22 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               AnimatedSwitcher(
-                duration: const Duration(milliseconds: 100),
+                duration: const Duration(milliseconds: 250),
+                transitionBuilder: (child, animation) {
+                  return ScaleTransition(
+                    scale: CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutBack,
+                    ),
+                    child: FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    ),
+                  );
+                },
                 child: Icon(
                   isSelected ? activeIcon : inactiveIcon,
-                  key: ValueKey(isSelected),
+                  key: ValueKey('${index}_$isSelected'),
                   size: 22.r,
                   color: isSelected ? primary : grey,
                 ),
@@ -152,7 +164,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               SizedBox(height: 4.h),
 
               AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 180),
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOut,
                 style: TextStyle(
                   fontSize: 10.5.sp,
                   color: isSelected ? primary : grey,
@@ -165,7 +178,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               SizedBox(height: 4.h),
 
               AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
                 width: isSelected ? 4.w : 0,
                 height: 4.w,
                 decoration: BoxDecoration(

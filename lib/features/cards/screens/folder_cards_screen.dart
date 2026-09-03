@@ -8,7 +8,7 @@ import 'package:flash_cards/features/cards/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/edit_flash_card_widget.dart';
 
 class FolderCardsScreen extends StatefulWidget {
@@ -224,12 +224,25 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
               const SizedBox(height: 20),
 
               // Counter
-              Text(
-                "${currentIndex + 1} / ${cards.length}",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: primary,
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: ScaleTransition(
+                      scale: animation,
+                      child: child,
+                    ),
+                  );
+                },
+                child: Text(
+                  "${currentIndex + 1} / ${cards.length}",
+                  key: ValueKey(currentIndex),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: primary,
+                  ),
                 ),
               ),
 
@@ -248,6 +261,18 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
                     return CardWidget(
                       question: card.question,
                       answer: card.answer,
+                    )
+                        .animate(
+                      key: ValueKey(index),
+                    )
+                        .fadeIn(
+                      duration: 300.ms,
+                    )
+                        .scale(
+                      begin: const Offset(0.97, 0.97),
+                      end: const Offset(1, 1),
+                      duration: 300.ms,
+                      curve: Curves.easeOut,
                     );
                   },
                 ),
@@ -264,11 +289,16 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
                   children: [
                     IconButton(
                       onPressed: currentIndex > 0 ? previousCard : null,
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                      ),
-                      iconSize: 28,
+                      icon: const Icon(Icons.arrow_back_ios),
+                      iconSize: 24,
                       color: primary,
+                    )
+                        .animate(
+                      target: currentIndex > 0 ? 1 : 0,
+                    )
+                        .scale(
+                      end: const Offset(1.05, 1.05),
+                      duration: 200.ms,
                     ),
                     Text(
                       "Swipe or use arrows",
@@ -280,11 +310,16 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
                       onPressed: currentIndex < cards.length - 1
                           ? nextCard
                           : null,
-                      icon: const Icon(
-                        Icons.arrow_forward_ios,
-                      ),
-                      iconSize: 28,
+                      icon: const Icon(Icons.arrow_forward_ios),
+                      iconSize: 24,
                       color: primary,
+                    )
+                        .animate(
+                      target: currentIndex < cards.length - 1 ? 1 : 0,
+                    )
+                        .scale(
+                      end: const Offset(1.05, 1.05),
+                      duration: 200.ms,
                     ),
                   ],
                 ),
