@@ -1,27 +1,77 @@
 import 'package:flash_cards/bloc/flash_cards_bloc.dart';
 import 'package:flash_cards/bloc/flash_cards_event.dart';
 import 'package:flash_cards/core/colors.dart';
+import 'package:flash_cards/core/custome_widgets/helpers.dart';
+import 'package:flash_cards/models/flash_card_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../core/custome_widgets/helpers.dart';
-import '../../../models/flash_card_model.dart';
 
 Future<void> dialogBuilderEdit(
     BuildContext context,
     int index,
     Flashcard card,
-    ) {
-  final TextEditingController question =
-  TextEditingController(text: card.question);
+    ) async {
+  await showDialog(
+    context: context,
+    builder: (_) {
+      return _EditFlashCardDialog(
+        index: index,
+        card: card,
+        parentContext: context,
+      );
+    },
+  );
+}
 
-  final TextEditingController answer =
-  TextEditingController(text: card.answer);
+class _EditFlashCardDialog extends StatefulWidget {
+  final int index;
+  final Flashcard card;
+  final BuildContext parentContext;
 
-  final TextEditingController hint =
-  TextEditingController(text: card.hint);
+  const _EditFlashCardDialog({
+    required this.index,
+    required this.card,
+    required this.parentContext,
+  });
+
+  @override
+  State<_EditFlashCardDialog> createState() =>
+      _EditFlashCardDialogState();
+}
+
+class _EditFlashCardDialogState
+    extends State<_EditFlashCardDialog> {
+  late final TextEditingController questionController;
+  late final TextEditingController answerController;
+  late final TextEditingController hintController;
 
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    questionController = TextEditingController(
+      text: widget.card.question,
+    );
+
+    answerController = TextEditingController(
+      text: widget.card.answer,
+    );
+
+    hintController = TextEditingController(
+      text: widget.card.hint,
+    );
+  }
+
+  @override
+  void dispose() {
+    questionController.dispose();
+    answerController.dispose();
+    hintController.dispose();
+
+    super.dispose();
+  }
 
   InputDecoration inputDecoration({
     required String hint,
@@ -65,143 +115,183 @@ Future<void> dialogBuilderEdit(
     );
   }
 
-  return showDialog(
-    context: context,
-    builder: (dialogContext) {
-      return AlertDialog(
-        backgroundColor: background,
-        elevation: 15,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(28),
-        ),
+  void updateFlashCard() {
+    FocusScope.of(context).unfocus();
 
-        title: Center(
-          child: Text(
-            "Edit FlashCard",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: primary,
-            ),
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+
+    final Flashcard updatedCard = Flashcard(
+      question: questionController.text.trim(),
+      answer: answerController.text.trim(),
+      hint: hintController.text.trim(),
+      folderId: widget.card.folderId,
+    );
+
+    widget.parentContext
+        .read<FlashCardsBloc>()
+        .add(
+      EditFlashCardEvent(
+        widget.index,
+        updatedCard,
+      ),
+    );
+
+    Navigator.pop(context);
+
+    Helpers().snackBar(
+      widget.parentContext,
+      text: 'FlashCard updated successfully',
+      color: green,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final keyboardHeight =
+        MediaQuery.of(context).viewInsets.bottom;
+
+    return AlertDialog(
+      backgroundColor: background,
+      elevation: 15,
+
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 24,
+      ),
+
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(28),
+      ),
+
+      title: Center(
+        child: Text(
+          'Edit FlashCard',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: primary,
           ),
         ),
+      ),
 
-        content: SizedBox(
+      content: AnimatedPadding(
+        duration: const Duration(milliseconds: 200),
+        padding: EdgeInsets.only(
+          bottom: keyboardHeight > 0 ? 8 : 0,
+        ),
+        child: SizedBox(
           width: 330,
           child: Form(
             key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: question,
-                  decoration: inputDecoration(
-                    hint: "Question",
-                    icon: Icons.question_mark,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Question can't be empty";
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 18),
-
-                TextFormField(
-                  controller: answer,
-                  decoration: inputDecoration(
-                    hint: "Answer",
-                    icon: Icons.notes,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return "Answer can't be empty";
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 18),
-
-                TextFormField(
-                  controller: hint,
-                  decoration: inputDecoration(
-                    hint: "Hint",
-                    icon: Icons.lightbulb,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        actionsPadding: const EdgeInsets.symmetric(
-          horizontal: 18,
-          vertical: 12,
-        ),
-
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-            },
-            child: Text(
-              "Cancel",
-              style: TextStyle(
-                color: primary,
-                fontSize: 16,
-              ),
-            ),
-          ),
-
-          SizedBox(
-            width: 120,
-            height: 45,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
-                foregroundColor: background,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  final Flashcard updatedCard = Flashcard(
-                    question: question.text.trim(),
-                    answer: answer.text.trim(),
-                    hint: hint.text.trim(),
-
-                    // Keep the same folder
-                    folderId: card.folderId,
-                  );
-
-                  context.read<FlashCardsBloc>().add(
-                    EditFlashCardEvent(
-                      index,
-                      updatedCard,
+            child: SingleChildScrollView(
+              keyboardDismissBehavior:
+              ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: questionController,
+                    textInputAction:
+                    TextInputAction.next,
+                    maxLines: null,
+                    decoration: inputDecoration(
+                      hint: 'Question',
+                      icon: Icons.question_mark,
                     ),
-                  );
+                    validator: (value) {
+                      if (value == null ||
+                          value.trim().isEmpty) {
+                        return "Question can't be empty";
+                      }
 
-                  Navigator.pop(dialogContext);
+                      return null;
+                    },
+                  ),
 
-                  Helpers().snackBar(context, text: 'FlashCard updated successfully', color: green);
+                  const SizedBox(height: 18),
 
-                }
-              },
-              child: const Text(
-                "Save",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                  TextFormField(
+                    controller: answerController,
+                    textInputAction:
+                    TextInputAction.next,
+                    maxLines: null,
+                    decoration: inputDecoration(
+                      hint: 'Answer',
+                      icon: Icons.notes,
+                    ),
+                    validator: (value) {
+                      if (value == null ||
+                          value.trim().isEmpty) {
+                        return "Answer can't be empty";
+                      }
+
+                      return null;
+                    },
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  TextFormField(
+                    controller: hintController,
+                    textInputAction:
+                    TextInputAction.done,
+                    maxLines: null,
+                    decoration: inputDecoration(
+                      hint: 'Hint',
+                      icon: Icons.lightbulb,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      );
-    },
-  );
+        ),
+      ),
+
+      actionsPadding: const EdgeInsets.symmetric(
+        horizontal: 18,
+        vertical: 12,
+      ),
+
+      actions: [
+        TextButton(
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            Navigator.pop(context);
+          },
+          child: Text(
+            'Cancel',
+            style: TextStyle(
+              color: primary,
+              fontSize: 16,
+            ),
+          ),
+        ),
+
+        SizedBox(
+          width: 120,
+          height: 45,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primary,
+              foregroundColor: background,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            onPressed: updateFlashCard,
+            child: const Text(
+              'Save',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

@@ -2,7 +2,7 @@ import 'package:flash_cards/core/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 
-class CardWidget extends StatelessWidget {
+class CardWidget extends StatefulWidget {
   final String question;
   final String answer;
 
@@ -11,6 +11,13 @@ class CardWidget extends StatelessWidget {
     required this.question,
     required this.answer,
   });
+
+  @override
+  State<CardWidget> createState() => _CardWidgetState();
+}
+
+class _CardWidgetState extends State<CardWidget> {
+  final GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
 
   @override
   Widget build(BuildContext context) {
@@ -22,73 +29,85 @@ class CardWidget extends StatelessWidget {
       ),
       color: Colors.transparent,
       child: FlipCard(
+        key: cardKey,
         direction: FlipDirection.HORIZONTAL,
-        side: CardSide.FRONT,
-        speed: 800,
+        speed: 700,
 
-        // ================= FRONT SIDE (QUESTION) =================
+        // ================= FRONT =================
         front: Container(
           width: double.infinity,
+          height: 260,
           decoration: BoxDecoration(
             color: primary,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: primary.withOpacity(0.3),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                color: primary.withOpacity(0.25),
+                blurRadius: 15,
+                offset: const Offset(0, 7),
               ),
             ],
           ),
           child: Stack(
             children: [
-              // Label يوضح إن ده السؤال
+              // Question label
               Positioned(
-                top: 16,
-                left: 16,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.help_outline_rounded,
-                        color: Colors.white,
-                        size: 14,
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        'Question',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                top: 18,
+                left: 18,
+                child: _label(
+                  icon: Icons.help_outline_rounded,
+                  text: 'Question',
+                  background: Colors.white.withOpacity(0.15),
+                  foreground: Colors.white,
+                ),
+              ),
+
+              // Question
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 55, 25, 70),
+                  child: Text(
+                    widget.question,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 19,
+                      fontWeight: FontWeight.w600,
+                      height: 1.4,
+                    ),
                   ),
                 ),
               ),
 
-              // نص السؤال
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),
-                  child: Text(
-                    question,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      height: 1.4,
+              // Show Answer Button
+              Positioned(
+                bottom: 18,
+                left: 24,
+                right: 24,
+                child: SizedBox(
+                  height: 46,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      cardKey.currentState?.toggleCard();
+                    },
+                    icon: const Icon(
+                      Icons.visibility_outlined,
+                      size: 19,
+                    ),
+                    label: const Text(
+                      'Show Answer',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: primary,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(13),
+                      ),
                     ),
                   ),
                 ),
@@ -97,66 +116,78 @@ class CardWidget extends StatelessWidget {
           ),
         ),
 
-        // ================= BACK SIDE (ANSWER) =================
+        // ================= BACK =================
         back: Container(
           width: double.infinity,
+          height: 260,
           decoration: BoxDecoration(
             color: secondary,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: primary.withOpacity(0.2),
+              color: primary.withOpacity(0.15),
               width: 1.5,
             ),
           ),
           child: Stack(
             children: [
-              // Label يوضح إن دي الإجابة / المعلومة
+              // Answer label
               Positioned(
-                top: 16,
-                left: 16,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: primary.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.lightbulb_outline_rounded,
-                        color: primary,
-                        size: 14,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Answer',
-                        style: TextStyle(
-                          color: primary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                top: 18,
+                left: 18,
+                child: _label(
+                  icon: Icons.lightbulb_outline_rounded,
+                  text: 'Answer',
+                  background: primary.withOpacity(0.12),
+                  foreground: primary,
+                ),
+              ),
+
+              // Answer
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 55, 25, 70),
+                  child: Text(
+                    widget.answer,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: textDark,
+                      fontSize: 19,
+                      fontWeight: FontWeight.w600,
+                      height: 1.4,
+                    ),
                   ),
                 ),
               ),
 
-              // نص الإجابة
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),
-                  child: Text(
-                    answer,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: textDark,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      height: 1.4,
+              // Show Question Button
+              Positioned(
+                bottom: 18,
+                left: 24,
+                right: 24,
+                child: SizedBox(
+                  height: 46,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      cardKey.currentState?.toggleCard();
+                    },
+                    icon: const Icon(
+                      Icons.replay_rounded,
+                      size: 19,
+                    ),
+                    label: const Text(
+                      'Show Question',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primary,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(13),
+                      ),
                     ),
                   ),
                 ),
@@ -164,6 +195,43 @@ class CardWidget extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _label({
+    required IconData icon,
+    required String text,
+    required Color background,
+    required Color foreground,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 7,
+      ),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: foreground,
+            size: 15,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: TextStyle(
+              color: foreground,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
