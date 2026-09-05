@@ -23,7 +23,7 @@ class CardScreen extends StatelessWidget {
       backgroundColor: background,
 
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: background,
         elevation: 0,
         centerTitle: false,
 

@@ -56,7 +56,7 @@ class QuizHistoryScreen extends StatelessWidget {
               final result = QuizResultModel.fromMap(rawData);
 
               // Get Folder Title
-              String folderName = 'Unknown Folder';
+              String folderName = 'Shuffle';
               for (var f in foldersBox.values) {
                 final map = Map<String, dynamic>.from(f);
                 if (map['Id'].toString() == result.folderId) {
