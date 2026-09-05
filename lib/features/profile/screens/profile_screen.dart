@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import '../../../core/colors.dart';
 import '../../../cubit/user_cubit.dart';
-import '../../register/screens/register_screen.dart';
+import '../../splash/screens/splash_screen.dart';
 import 'edit_profile_dialog.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -510,7 +509,7 @@ class ProfileScreen extends StatelessWidget {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (_) => const RegisterScreen(),
+          builder: (_) => const SplashScreen(),
         ),
             (route) => false,
       );

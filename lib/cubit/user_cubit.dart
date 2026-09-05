@@ -1,6 +1,6 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class UserState {
   final String name;
   final String password;
@@ -68,6 +68,13 @@ class UserCubit extends HydratedCubit<UserState> {
 
     final myBox3 = Hive.box('QuizResults');
     await myBox3.deleteAll(myBox3.keys);
+
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setBool(
+      'isFirstLaunch',
+      true,
+    );
 
     await clear();
     emit(UserState());
