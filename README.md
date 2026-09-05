@@ -1,130 +1,199 @@
-📚 Flash Cards
-
-A modern Flutter flashcard application designed to make studying, reviewing, and testing knowledge simple and interactive.
-
-The app allows users to organize flashcards into folders, study cards using a front/back experience, create quizzes, track quiz history, and manage their profile.
-
-📱 UI Preview
+# 📚 Flash Cards
 
 <p align="center">
-  <img src="screenshots/home.png" width="140">
-  <img src="screenshots/folders.png" width="140">
-  <img src="screenshots/add_flash_card.png" width="140">
-  <img src="screenshots/front_of_flash_card.png" width="140">
-  <img src="screenshots/back_of_flash_card.png" width="140">
+  <strong>A modern Flutter application for creating, organizing, studying, and testing flashcards.</strong>
 </p>
 
 <p align="center">
-  <img src="screenshots/quiz_setup.png" width="140">
-  <img src="screenshots/question.png" width="140">
-  <img src="screenshots/quiz_score.png" width="140">
-  <img src="screenshots/profile.png" width="140">
-  <img src="screenshots/quizzes_history.png" width="140">
+  Organize your knowledge into folders, review flashcards with an interactive front/back experience,  
+  create quizzes, track your results, and manage your learning progress.
 </p>
 
-✨ Features
+<p align="center">
+  <img src="screenshots/home.png" width="110">
+  <img src="screenshots/folders.png" width="110">
+  <img src="screenshots/add_flash_card.png" width="110">
+  <img src="screenshots/front_of_flash_card.png" width="110">
+  <img src="screenshots/back_of_flash_card.png" width="110">
+</p>
 
-🗂️ Flashcard Organization
+<p align="center">
+  <img src="screenshots/quiz_setup.png" width="110">
+  <img src="screenshots/question.png" width="110">
+  <img src="screenshots/quiz_score.png" width="110">
+  <img src="screenshots/quizzes_history.png" width="110">
+  <img src="screenshots/profile.png" width="110">
+</p>
 
-Create and manage study folders.
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-Framework-02569B?logo=flutter&logoColor=white">
+  <img src="https://img.shields.io/badge/Dart-Language-0175C2?logo=dart&logoColor=white">
+  <img src="https://img.shields.io/badge/BLoC-State%20Management-5B2C83">
+  <img src="https://img.shields.io/badge/Hive-Local%20Storage-FFB300">
+</p>
 
-Add flashcards directly to a selected folder.
+---
 
-Edit and delete folders.
+## ✨ Features
 
-Keep flashcards organized by subject or topic.
+### 🗂️ Folder Management
+- Create study folders for different subjects or topics.
+- Add flashcards directly to a specific folder.
+- Edit existing folders.
+- Delete folders.
+- Keep learning content organized and easy to access.
 
-📝 Flashcards
-
+### 📝 Flashcard Management
 Each flashcard contains:
 
-Question
+- **Question**
+- **Answer**
+- **Hint**
+- **Folder ID**
 
-Answer
+Users can create flashcards and associate them with their appropriate study folder.
 
-Hint
+### 🃏 Interactive Flashcards
 
-The study experience separates the question and answer into a front/back card flow to make revision more interactive.
+Flashcards use a front/back study experience:
 
-🧠 Quiz System
+```text
+        ┌──────────────────┐
+        │     Question     │
+        │                  │
+        │       ↓          │
+        │      Flip        │
+        │       ↓          │
+        │      Answer      │
+        └──────────────────┘
+```
 
-Choose a folder/topic for the quiz.
+Animations are used to make the learning experience more interactive and engaging.
 
-Configure the quiz before starting.
+### 🧠 Quiz System
 
-Answer questions interactively.
+The application provides a complete quiz flow:
 
-View the final score.
+- Select a folder.
+- Configure the quiz.
+- Answer questions.
+- Calculate the final score.
+- Display quiz results.
+- Store previous quiz results in quiz history.
 
-Keep a history of previous quizzes.
+### 📊 Quiz History
 
-👤 Profile
+Users can access previous quiz attempts and review their results.
 
-Dedicated profile screen.
+### 👤 Profile
 
-User-related information and settings in one place.
+A dedicated profile screen provides access to user-related information and application options.
 
-💾 Local Data Persistence
+---
 
-The application uses local storage to keep important data available between sessions:
+# 🎨 UI Preview
 
-Hive for structured local application data such as folders and flashcards.
+The application follows a clean and minimal interface designed around a simple learning workflow.
 
-SharedPreferences for lightweight persistent preferences/user-related values.
+### 🏠 Home
 
-🔄 State Management
+Main entry point of the application where users can access their learning content and navigate through the main features.
 
-The project uses Flutter BLoC architecture with:
+<p align="center">
+  <img src="screenshots/home.png" width="180">
+</p>
 
-BLoC for event-driven and more complex application flows.
+### 📁 Folders
 
-Cubit for simpler state-management logic.
+Folders organize flashcards by subject, course, or topic.
 
-This keeps UI code separated from business logic and makes the application easier to maintain.
+<p align="center">
+  <img src="screenshots/folders.png" width="180">
+</p>
 
-🎬 Animations
+### ➕ Add Flashcard
 
-Animations are used throughout the app to provide a smoother and more engaging user experience, especially around the flashcard/quiz flow.
+Users can create a flashcard by entering its question, answer, hint, and selecting the folder where it belongs.
 
-🛠️ Tech Stack
+<p align="center">
+  <img src="screenshots/add_flash_card.png" width="180">
+</p>
 
-Technology
+### 🃏 Flashcard Experience
 
-Usage
+The flashcard is divided into a question/front side and an answer/back side.
 
-Flutter / Dart
+<p align="center">
+  <img src="screenshots/front_of_flash_card.png" width="180">
+  &nbsp;&nbsp;&nbsp;
+  <img src="screenshots/back_of_flash_card.png" width="180">
+</p>
 
-Application development
+### ⚙️ Quiz Setup
 
-BLoC
+Users configure their quiz before starting.
 
-Event-driven state management
+<p align="center">
+  <img src="screenshots/quiz_setup.png" width="180">
+</p>
 
-Cubit
+### ❓ Quiz Questions
 
-Lightweight state management
+Questions are presented interactively during the quiz.
 
-Hive
+<p align="center">
+  <img src="screenshots/question.png" width="180">
+</p>
 
-Local database / persistent structured data
+### 🏆 Quiz Score
 
-SharedPreferences
+The final result is displayed after completing the quiz.
 
-Lightweight local persistence
+<p align="center">
+  <img src="screenshots/quiz_score.png" width="180">
+</p>
 
-Material UI
+### 📊 Quiz History
 
-User interface
+Users can review previous quiz attempts and results.
 
-Animations
+<p align="center">
+  <img src="screenshots/quizzes_history.png" width="180">
+</p>
 
-Interactive UI experience
+### 👤 Profile
 
-🏗️ Architecture
+The profile screen contains user-related information and options.
 
-The project follows a feature-based Flutter structure with separation between UI, state management, models, and core utilities.
+<p align="center">
+  <img src="screenshots/profile.png" width="180">
+</p>
 
+---
+
+# 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| **Flutter** | Cross-platform application development |
+| **Dart** | Application programming language |
+| **BLoC** | Event-driven state management |
+| **Cubit** | Lightweight state management |
+| **Hive** | Local database and structured data persistence |
+| **SharedPreferences** | Lightweight local data persistence |
+| **Material UI** | UI components and application styling |
+| **Animations** | Interactive and smooth user experience |
+| **Firebase / Google Services** | Project service configuration |
+
+---
+
+# 🏗️ Project Architecture
+
+The project follows a feature-based Flutter structure, keeping UI, state management, models, and shared resources separated.
+
+```text
 lib/
+│
 ├── bloc/
 │   ├── flash_cards_bloc.dart
 │   ├── flash_cards_event.dart
@@ -141,6 +210,7 @@ lib/
 │   └── ...
 │
 ├── features/
+│   │
 │   ├── cards/
 │   │   ├── screens/
 │   │   └── widgets/
@@ -156,256 +226,258 @@ lib/
 │   └── profile/
 │
 └── main.dart
+```
 
-The exact folders/files may vary as the project continues to evolve.
+The structure helps keep responsibilities separated and makes the application easier to maintain and extend.
 
-🎨 App Screens
+---
 
-🏠 Home
+# 🔄 Application Flow
 
-The home screen acts as the main entry point of the application and provides access to the user's study content.
+```text
+                         ┌─────────────┐
+                         │    HOME     │
+                         └──────┬──────┘
+                                │
+              ┌─────────────────┼─────────────────┐
+              │                 │                 │
+              ▼                 ▼                 ▼
+          FOLDERS              QUIZ            PROFILE
+              │                 │
+              ▼                 ▼
+       ADD FLASHCARD        QUIZ SETUP
+              │                 │
+              ▼                 ▼
+      FLASHCARD FRONT       QUESTIONS
+              │                 │
+              ▼                 ▼
+      FLASHCARD BACK        QUIZ SCORE
+                                │
+                                ▼
+                         QUIZ HISTORY
+```
 
+---
 
+# 🔄 State Management
 
-📁 Folders
+The project uses both **BLoC** and **Cubit**, depending on the complexity of each feature.
 
-Folders help users organize flashcards by subject, course, or topic.
+## BLoC
 
+BLoC is used for event-driven application flows.
 
+The general flow is:
 
-➕ Add New Flashcard
-
-Users can create a new flashcard by entering a question, answer, hint, and selecting the folder where the card should be stored.
-
-
-
-🃏 Flashcard Front
-
-The front of the flashcard displays the question and provides the main study interaction.
-
-
-
-💡 Flashcard Back
-
-The back of the card reveals the answer and provides the information needed for review.
-
-
-
-⚙️ Quiz Setup
-
-Before starting a quiz, users can configure the quiz according to the available study material.
-
-
-
-❓ Quiz Question
-
-Users answer flashcard-based questions during the quiz.
-
-
-
-🏆 Quiz Score
-
-After completing a quiz, the application displays the user's result.
-
-
-
-📊 Quiz History
-
-Users can review their previous quiz activity and results.
-
-
-
-👤 Profile
-
-The profile screen provides access to user-related information and options.
-
-
-
-🔄 Application Flow
-
-                 ┌─────────────┐
-                 │    Home     │
-                 └──────┬──────┘
-                        │
-          ┌─────────────┼─────────────┐
-          │             │             │
-          ▼             ▼             ▼
-      Folders         Quiz         Profile
-          │             │
-          ▼             ▼
-   Add Flashcard    Quiz Setup
-          │             │
-          ▼             ▼
-    Flashcard       Questions
-    Front/Back          │
-                        ▼
-                    Quiz Score
-                        │
-                        ▼
-                  Quiz History
-
-💾 Data Storage
-
-Hive
-
-Hive is used for storing structured application data locally.
-
-For example, flashcards can be stored with information such as:
-
-Question
-Answer
-Hint
-FolderId
-
-Folders can contain information such as:
-
-Title
-Id
-
-Using a FolderId allows flashcards to be associated with their corresponding folder.
-
-SharedPreferences
-
-SharedPreferences is used for small persistent values that do not require a full database structure.
-
-🧩 State Management
-
-The application uses both BLoC and Cubit, depending on the complexity of each feature.
-
-BLoC
-
-BLoC follows an event → state approach:
-
+```text
 User Action
-    ↓
-Event
-    ↓
-BLoC
-    ↓
+     ↓
+   Event
+     ↓
+    BLoC
+     ↓
 Business Logic
-    ↓
-New State
-    ↓
-UI Update
+     ↓
+   New State
+     ↓
+    UI
+```
 
-For example, adding a flashcard can follow:
+For example, adding a flashcard:
 
+```text
 Add Flashcard Button
         ↓
 AddFlashCardEvent
         ↓
 FlashCardsBloc
         ↓
-Save Card
+Save Flashcard
         ↓
 Emit Updated State
         ↓
-UI Rebuilds
+Update UI
+```
 
-Cubit
+## Cubit
 
-Cubit is used where the state logic is simpler and does not require a separate event class.
+Cubit is used for simpler state-management scenarios where a full event/state flow is unnecessary.
 
-🎯 Why This Project?
+Using both approaches allows each feature to use the state-management solution that best fits its complexity.
 
-This project was built to practice and demonstrate practical Flutter development concepts, including:
+---
 
-Flutter UI development
+# 💾 Local Data Storage
 
-Feature-based project organization
+## Hive
 
-BLoC and Cubit state management
+Hive is used as the local database for structured application data.
 
-Local database management with Hive
+Flashcards contain data such as:
 
-Persistent preferences with SharedPreferences
+```text
+Question
+Answer
+Hint
+FolderId
+```
 
-Navigation between multiple screens
+Folders contain information such as:
 
-Form validation
+```text
+Title
+Id
+```
 
-Reusable widgets
+The `FolderId` connects each flashcard to its corresponding folder.
 
-Animations
+This allows the application to retrieve and organize flashcards according to their subject/topic.
 
-Quiz logic
+---
 
-CRUD operations
+## SharedPreferences
 
-Managing relationships between folders and flashcards
+SharedPreferences is used for lightweight persistent values that do not require a structured database.
 
-🚀 Getting Started
+It is suitable for storing simple preferences and small pieces of persistent application data.
 
-1. Clone the repository
+---
 
-git clone <https://github.com/Haneen-Waleed/codealpha_tasks.git>
+# 🎬 Animations
 
-2. Open the project
+Animations are incorporated into the application to improve the overall user experience.
 
+They are especially useful in the flashcard learning flow, where transitions between the question and answer make studying feel more interactive rather than simply displaying static information.
+
+---
+
+# 🧩 Core Concepts Demonstrated
+
+This project demonstrates practical Flutter development concepts including:
+
+- Flutter UI development
+- Dart programming
+- Feature-based architecture
+- BLoC pattern
+- Cubit state management
+- CRUD operations
+- Hive local database
+- SharedPreferences
+- Form validation
+- Navigation
+- Reusable widgets
+- Flutter animations
+- Quiz logic
+- Folder/flashcard relationships
+- Local data persistence
+
+---
+
+# 🚀 Getting Started
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/Haneen-Waleed/codealpha_tasks.git
+```
+
+## 2. Navigate to the Project
+
+```bash
 cd flash_cards
+```
 
-3. Install dependencies
+## 3. Install Dependencies
 
+```bash
 flutter pub get
+```
 
-4. Run the application
+## 4. Run the Application
 
+```bash
 flutter run
+```
 
-📱 Requirements
+---
 
-Before running the project, make sure you have:
+# 📱 Requirements
 
-Flutter SDK
+Before running the application, make sure you have:
 
-Dart SDK
+- Flutter SDK
+- Dart SDK
+- Android Studio or VS Code
+- Android Emulator or physical Android device
 
-Android Studio or VS Code
+---
 
-An Android emulator or physical Android device
+# 🔐 Configuration
 
-🔐 Configuration
-
-If the project contains Firebase/Google service configuration, make sure the required configuration files are present before running the application.
+If Firebase / Google Services are required for the project, make sure the appropriate configuration files are available.
 
 For Android, this may include:
 
+```text
 android/app/google-services.json
+```
 
-Do not commit private credentials, API keys, or other sensitive configuration files to a public repository.
+> ⚠️ Never commit private credentials, secrets, API keys, or sensitive configuration files to a public repository.
 
-📌 Future Improvements
+---
 
-Possible future improvements include:
+# 📌 Future Improvements
 
-☁️ Cloud synchronization
+The project can be extended with additional learning features such as:
 
-🔐 More complete authentication
+- ☁️ Cloud synchronization
+- 🔐 Complete authentication system
+- 📈 Detailed learning statistics
+- 🔔 Study reminders
+- ⭐ Favorite flashcards
+- 🔍 Search and filtering
+- 🎯 Spaced repetition
+- 🌙 Dark mode
+- 📤 Import / export flashcards
+- 🏅 Achievements and learning streaks
+- 🧠 Additional quiz modes
 
-📈 Detailed learning statistics
+---
 
-🔔 Study reminders
+# 🎯 Project Goal
 
-⭐ Favorite flashcards
+The main goal of this project was to build a practical Flutter application while applying real-world concepts such as state management, local persistence, reusable UI components, animations, navigation, and feature-based project organization.
 
-🔍 Search and filtering
+It also serves as a practical implementation of a complete learning workflow:
 
-🎯 Spaced repetition
+```text
+Create
+  ↓
+Organize
+  ↓
+Study
+  ↓
+Practice
+  ↓
+Take Quiz
+  ↓
+Review Results
+```
 
-🌙 Dark mode
+---
 
-📤 Import/export flashcards
+# 👩‍💻 Author
 
-🏅 More quiz modes and achievements
+## Haneen Waleed
 
-👩‍💻 Author
+**Computer Science Student | Flutter Developer**
 
-Hanin Waleed
+---
 
-Computer Science Student & Flutter Developer
+# ⭐ Project Status
 
-⭐ Project Status
+🚧 **Actively Developed**
 
-This project is actively being developed and improved as part of my Flutter development journey.
+This project is part of my Flutter development journey and is continuously being improved with new features, UI enhancements, and better architecture.
 
-If you find the project useful or interesting, consider giving it a ⭐ on GitHub.
+If you find the project interesting, feel free to ⭐ the repository!
