@@ -29,7 +29,7 @@ class QuizResultScreen extends StatelessWidget {
               score == totalQuestions
                   ? Icons.emoji_events_outlined
                   : Icons.check_circle_outline,
-              size: 70,
+              size: 50,
               color: primary,
             )
                 .animate()

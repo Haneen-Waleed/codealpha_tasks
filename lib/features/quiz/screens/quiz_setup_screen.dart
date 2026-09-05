@@ -47,7 +47,7 @@ class _QuizSetupScreenState extends State<QuizSetupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: background,
 
       bottomNavigationBar: const CustomBottomNavBar(
         selectedIndex: 2,

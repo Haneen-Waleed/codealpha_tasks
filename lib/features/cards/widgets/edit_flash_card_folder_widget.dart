@@ -4,6 +4,7 @@ import 'package:flash_cards/bloc/flash_cards_bloc.dart';
 import 'package:flash_cards/bloc/flash_cards_event.dart';
 import 'package:flash_cards/bloc/flash_cards_state.dart';
 import 'package:flash_cards/core/colors.dart';
+import 'package:flash_cards/core/custome_widgets/helpers.dart';
 import 'package:flash_cards/models/folder_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +32,7 @@ Future<void> dialogBuilderEditFolder(
         color: primary,
       ),
       filled: true,
-      fillColor: Colors.grey.shade100,
+      fillColor: lightGrey,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 20,
         vertical: 18,
@@ -147,23 +148,7 @@ Future<void> dialogBuilderEditFolder(
                     if (formKey.currentState!.validate()) {
                       Navigator.pop(context);
                       context.read<FlashCardFolderBloc>().add(EditFlashCardFolderEvent(index,title.text));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          content: const Center(
-                            child: Text(
-                              "Folder updated successfully",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
+                      Helpers().snackBar(context, text: 'Folder updated successfully', color: green);
                     }
                   },
                   child: const Text(

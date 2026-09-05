@@ -2,6 +2,7 @@ import 'package:flash_cards/bloc/flash_cards_bloc.dart';
 import 'package:flash_cards/bloc/flash_cards_event.dart';
 import 'package:flash_cards/bloc/flash_cards_state.dart';
 import 'package:flash_cards/core/colors.dart';
+import 'package:flash_cards/core/custome_widgets/confirm_action_widget.dart';
 import 'package:flash_cards/models/folder_model.dart';
 import 'package:flash_cards/models/flash_card_model.dart';
 import 'package:flash_cards/features/cards/widgets/card_widget.dart';
@@ -90,49 +91,18 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
 
   Future<void> _deleteCard(BuildContext context) async {
     if (cards.isEmpty) return;
-
-    final currentCard = cards[currentIndex];
-    final hiveIndex = _getHiveIndex(currentCard);
+     final currentCard = cards[currentIndex];
+     final hiveIndex = _getHiveIndex(currentCard);
 
     if (hiveIndex == -1) return;
 
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: const Text('Delete flashcard?'),
-          content: const Text(
-            'Are you sure you want to delete this flashcard?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: primary),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-              child: Text(
-                'Delete',
-                style: TextStyle(color: red),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirm == true) {
+    ConfirmActionWidget().confirmAction(context, action: (){
       context.read<FlashCardsBloc>().add(
         DeleteFlashCardEvent(hiveIndex),
       );
+    },title: 'Delete this FlashCard',subTitle: 'This FlashCard will be permanently deleted');
+    if (currentIndex >= cards.length - 1 && currentIndex > 0) {
+      pageController.jumpToPage(currentIndex - 1);
     }
   }
 
@@ -160,9 +130,9 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: background,
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: background,
             elevation: 0,
             centerTitle: true,
             title: Text(
@@ -197,7 +167,7 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
                 Icon(
                   Icons.style_outlined,
                   size: 70,
-                  color: Colors.grey.shade400,
+                  color: lightGrey,
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -205,7 +175,7 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade700,
+                    color: grey,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -213,7 +183,7 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
                   "Add a flashcard to this folder",
                   style: TextStyle(
                     fontSize: 15,
-                    color: Colors.grey.shade500,
+                    color: grey,
                   ),
                 ),
               ],
@@ -303,7 +273,7 @@ class _FolderCardsScreenState extends State<FolderCardsScreen> {
                     Text(
                       "Swipe or use arrows",
                       style: TextStyle(
-                        color: Colors.grey.shade500,
+                        color: grey,
                       ),
                     ),
                     IconButton(

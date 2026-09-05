@@ -59,8 +59,8 @@ class CardWidget extends StatelessWidget {
               child: Text(
                 answer,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
+                style:  TextStyle(
+                  color: textDark,
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),

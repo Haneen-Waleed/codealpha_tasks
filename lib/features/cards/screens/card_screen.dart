@@ -1,11 +1,12 @@
 import 'package:flash_cards/bloc/flash_card_folder_bloc.dart';
+import 'package:flash_cards/core/custome_widgets/confirm_action_widget.dart';
+import 'package:flash_cards/core/custome_widgets/helpers.dart';
 import 'package:flash_cards/features/cards/widgets/add_flash_card_folder_widget.dart';
 import 'package:flash_cards/features/cards/widgets/folder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
 import '../../../core/colors.dart';
 import '../../../core/custome_widgets/custome_bottom_nav_bar.dart';
 import '../../../models/folder_model.dart';
@@ -19,17 +20,17 @@ class CardScreen extends StatelessWidget {
     final foldersBox = Hive.box('Folders');
 
     return Scaffold(
-      backgroundColor: const Color(0xffFAFAFA),
+      backgroundColor: background,
 
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
 
-        title: const Text(
+        title:  Text(
           'My Folders',
           style: TextStyle(
-            color: Colors.black,
+            color: textDark,
             fontSize: 24,
             fontWeight: FontWeight.w600,
             letterSpacing: -0.5,
@@ -49,7 +50,7 @@ class CardScreen extends StatelessWidget {
         actions: [
           PopupMenuButton<String>(
             elevation: 5,
-            color: Colors.white,
+            color: background,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
@@ -69,18 +70,7 @@ class CardScreen extends StatelessWidget {
                 if (foldersBox.isNotEmpty) {
                   dialogBuilder(context);
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      content: const Text(
-                        'Create a folder first',
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
+                  Helpers().snackBar(context, text: 'Create a folder first', color: warning);
                 }
               }
             },
@@ -152,7 +142,7 @@ class CardScreen extends StatelessWidget {
                     Text(
                       '${foldersBox.length} folders',
                       style: TextStyle(
-                        color: Colors.grey.shade600,
+                        color: grey,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -173,11 +163,15 @@ class CardScreen extends StatelessWidget {
 
                     IconButton(
                       onPressed: () {
-                        _deleteAllFolders(context);
+                        ConfirmActionWidget().confirmAction(context, action: (){context
+                            .read<FlashCardFolderBloc>()
+                            .add(
+                          DeleteAllFlashCardFolderEvent());
+                        });
                       },
                       icon: Icon(
                         Icons.delete_outline_rounded,
-                        color: Colors.grey.shade600,
+                        color: grey,
                         size: 21,
                       ),
                       tooltip: 'Delete all',
@@ -261,30 +255,17 @@ class CardScreen extends StatelessWidget {
 
             // Visual
             Container(
-              width: 100,
-              height: 100,
+              width: 90,
+              height: 90,
               decoration: BoxDecoration(
                 color: primary.withOpacity(0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.folder_open_outlined,
-                size: 50,
+                size: 45,
                 color: primary.withOpacity(0.65),
               ),
-            )
-                .animate(
-              onPlay: (controller) {
-                controller.repeat(
-                  reverse: true,
-                );
-              },
-            )
-                .moveY(
-              begin: -4,
-              end: 4,
-              duration: 1600.ms,
-              curve: Curves.easeInOut,
             ),
 
             const SizedBox(height: 24),
@@ -313,7 +294,7 @@ class CardScreen extends StatelessWidget {
               'Create a folder to start organizing\nyour flashcards.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.grey.shade500,
+                color: grey,
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -324,7 +305,7 @@ class CardScreen extends StatelessWidget {
               duration: 450.ms,
             ),
 
-            const SizedBox(height: 22),
+            const SizedBox(height: 18),
 
             TextButton.icon(
               onPressed: () {
@@ -359,73 +340,5 @@ class CardScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _deleteAllFolders(
-      BuildContext context,
-      ) async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22),
-          ),
-
-          title: const Text(
-            'Delete all folders?',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-
-          content: const Text(
-            'All folders will be permanently deleted.',
-          ),
-
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(
-                  context,
-                  false,
-                );
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  color: primary,
-                ),
-              ),
-            ),
-
-            TextButton(
-              onPressed: () {
-                Navigator.pop(
-                  context,
-                  true,
-                );
-              },
-              child: Text(
-                'Delete',
-                style: TextStyle(
-                  color: red,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirm == true) {
-      context
-          .read<FlashCardFolderBloc>()
-          .add(
-        DeleteAllFlashCardFolderEvent(),
-      );
-    }
   }
 }

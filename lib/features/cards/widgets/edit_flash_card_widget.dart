@@ -4,6 +4,7 @@ import 'package:flash_cards/core/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/custome_widgets/helpers.dart';
 import '../../../models/flash_card_model.dart';
 
 Future<void> dialogBuilderEdit(
@@ -33,7 +34,7 @@ Future<void> dialogBuilderEdit(
         color: primary,
       ),
       filled: true,
-      fillColor: Colors.grey.shade100,
+      fillColor: lightGrey,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 20,
         vertical: 18,
@@ -68,7 +69,7 @@ Future<void> dialogBuilderEdit(
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: background,
         elevation: 15,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(28),
@@ -161,7 +162,7 @@ Future<void> dialogBuilderEdit(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,
-                foregroundColor: Colors.white,
+                foregroundColor: background,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
@@ -187,23 +188,8 @@ Future<void> dialogBuilderEdit(
 
                   Navigator.pop(dialogContext);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      content: const Center(
-                        child: Text(
-                          "FlashCard updated successfully",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+                  Helpers().snackBar(context, text: 'FlashCard updated successfully', color: green);
+
                 }
               },
               child: const Text(

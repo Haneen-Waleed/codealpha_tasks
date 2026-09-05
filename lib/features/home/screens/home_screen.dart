@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flash_cards/core/colors.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
 import '../../../cubit/user_cubit.dart';
 import '../../profile/screens/profile_screen.dart';
+import '../../quiz/screens/quiz_history_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,76 +16,46 @@ class HomeScreen extends StatelessWidget {
     final userState = context.watch<UserCubit>().state;
     final foldersBox = Hive.box('Folders');
     final cardsBox = Hive.box('FlashCards');
+    final quizBox = Hive.box('QuizResults');
 
     return Scaffold(
-      backgroundColor: Colors.white,
-
+      backgroundColor: background,
       bottomNavigationBar: const CustomBottomNavBar(
         selectedIndex: 0,
       ),
-
       body: SafeArea(
         child: ValueListenableBuilder(
           valueListenable: foldersBox.listenable(),
-
           builder: (context, Box box, _) {
             final folderList = box.values.toList();
-
             return CustomScrollView(
               physics: const BouncingScrollPhysics(),
-
               slivers: [
-
-                // --------------------------------------------------
                 // Header
-                // --------------------------------------------------
-
                 SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(
-                    24,
-                    20,
-                    24,
-                    12,
-                  ),
-
+                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 12),
                   sliver: SliverToBoxAdapter(
                     child: Row(
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
-
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-
                         Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
                             Text(
                               'WELCOME BACK',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 1.2,
-                                color: Colors.grey.shade500,
+                                color: grey,
                               ),
                             )
                                 .animate()
-                                .fadeIn(
-                              duration: 400.ms,
-                            )
-                                .slideX(
-                              begin: -0.08,
-                              end: 0,
-                              duration: 400.ms,
-                            ),
-
+                                .fadeIn(duration: 400.ms)
+                                .slideX(begin: -0.08, end: 0, duration: 400.ms),
                             const SizedBox(height: 3),
-
                             Text(
-                              userState.name.isEmpty
-                                  ? 'Student'
-                                  : userState.name,
+                              userState.name.isEmpty ? 'Student' : userState.name,
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w800,
@@ -93,10 +63,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                             )
                                 .animate()
-                                .fadeIn(
-                              delay: 100.ms,
-                              duration: 450.ms,
-                            )
+                                .fadeIn(delay: 100.ms, duration: 450.ms)
                                 .slideX(
                               begin: -0.1,
                               end: 0,
@@ -106,30 +73,22 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-
                         GestureDetector(
                           onTap: () {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (_) =>
-                                const ProfileScreen(),
+                                builder: (_) => const ProfileScreen(),
                               ),
                             );
                           },
-
                           child: CircleAvatar(
                             radius: 22,
-
-                            backgroundColor:
-                            primary.withOpacity(0.1),
-
+                            backgroundColor: primary.withOpacity(0.1),
                             child: Text(
                               userState.name.isNotEmpty
-                                  ? userState.name[0]
-                                  .toUpperCase()
+                                  ? userState.name[0].toUpperCase()
                                   : 'U',
-
                               style: TextStyle(
                                 color: primary,
                                 fontWeight: FontWeight.bold,
@@ -139,19 +98,10 @@ class HomeScreen extends StatelessWidget {
                           ),
                         )
                             .animate()
-                            .fadeIn(
-                          delay: 200.ms,
-                          duration: 400.ms,
-                        )
+                            .fadeIn(delay: 200.ms, duration: 400.ms)
                             .scale(
-                          begin: const Offset(
-                            0.75,
-                            0.75,
-                          ),
-                          end: const Offset(
-                            1,
-                            1,
-                          ),
+                          begin: const Offset(0.75, 0.75),
+                          end: const Offset(1, 1),
                           delay: 200.ms,
                           duration: 450.ms,
                           curve: Curves.easeOutBack,
@@ -161,56 +111,89 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                // --------------------------------------------------
-                // Statistics
-                // --------------------------------------------------
-
+                // Interactive Stats Bar with History Button
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
                   ),
-
                   sliver: SliverToBoxAdapter(
                     child: Container(
-                      padding: const EdgeInsets.all(20),
-
+                      padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        borderRadius:
-                        BorderRadius.circular(20),
-
+                        color: cardBackground,
+                        borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Colors.grey.shade200,
+                          color: lightGrey,
                         ),
                       ),
-
                       child: Row(
                         children: [
-
                           _buildStatItem(
-                            label: 'Total Folders',
+                            label: 'Folders',
                             value: '${folderList.length}',
                           ),
-
                           Container(
                             height: 30,
                             width: 1,
-                            color: Colors.grey.shade300,
+                            color: lightGrey,
                           ),
-
                           _buildStatItem(
-                            label: 'Total Cards',
+                            label: 'Cards',
                             value: '${cardsBox.length}',
+                          ),
+                          Container(
+                            height: 30,
+                            width: 1,
+                            color: lightGrey,
+                          ),
+                          // History Button with matching tap target
+                          Expanded(
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const QuizHistoryScreen(),
+                                  ),
+                                );
+                              },
+                              child: ValueListenableBuilder(
+                                valueListenable: quizBox.listenable(),
+                                builder: (context, Box qBox, _) {
+                                  return Column(
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          '${qBox.length}',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
+                                            color: textDark,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 3),
+                                      Text(
+                                        'History',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: grey,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     )
                         .animate()
-                        .fadeIn(
-                      delay: 250.ms,
-                      duration: 450.ms,
-                    )
+                        .fadeIn(delay: 250.ms, duration: 450.ms)
                         .slideY(
                       begin: 0.08,
                       end: 0,
@@ -221,34 +204,21 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                // --------------------------------------------------
-                // Folders Title
-                // --------------------------------------------------
-
+                // Folder Header Title
                 SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(
-                    24,
-                    22,
-                    24,
-                    12,
-                  ),
-
+                  padding: const EdgeInsets.fromLTRB(24, 22, 24, 12),
                   sliver: SliverToBoxAdapter(
                     child: Text(
                       'Your Folders',
-
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.3,
-                        color: Colors.black87,
+                        color: textDark,
                       ),
                     )
                         .animate()
-                        .fadeIn(
-                      delay: 350.ms,
-                      duration: 400.ms,
-                    )
+                        .fadeIn(delay: 350.ms, duration: 400.ms)
                         .slideX(
                       begin: -0.06,
                       end: 0,
@@ -258,47 +228,28 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                // --------------------------------------------------
-                // Empty State
-                // --------------------------------------------------
-
+                // Empty State or Folder List
                 if (folderList.isEmpty)
-
                   SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(
-                      40,
-                      35,
-                      40,
-                      40,
-                    ),
-
+                    padding: const EdgeInsets.fromLTRB(40, 35, 40, 40),
                     sliver: SliverToBoxAdapter(
                       child: Column(
                         children: [
-
                           Container(
                             width: 80,
                             height: 80,
-
                             decoration: BoxDecoration(
-                              color:
-                              primary.withOpacity(0.07),
+                              color: primary.withOpacity(0.07),
                               shape: BoxShape.circle,
                             ),
-
                             child: Icon(
                               Icons.folder_open_outlined,
                               size: 38,
-                              color:
-                              primary.withOpacity(0.65),
+                              color: primary.withOpacity(0.65),
                             ),
                           )
                               .animate(
-                            onPlay: (controller) {
-                              controller.repeat(
-                                reverse: true,
-                              );
-                            },
+                            onPlay: (controller) => controller.repeat(reverse: true),
                           )
                               .moveY(
                             begin: -3,
@@ -306,9 +257,7 @@ class HomeScreen extends StatelessWidget {
                             duration: 1600.ms,
                             curve: Curves.easeInOut,
                           ),
-
                           const SizedBox(height: 18),
-
                           const Text(
                             'No folders yet',
                             style: TextStyle(
@@ -317,193 +266,108 @@ class HomeScreen extends StatelessWidget {
                             ),
                           )
                               .animate()
-                              .fadeIn(
-                            delay: 150.ms,
-                            duration: 400.ms,
-                          ),
-
+                              .fadeIn(delay: 150.ms, duration: 400.ms),
                           const SizedBox(height: 6),
-
                           Text(
                             'Create a folder to start\norganizing your flashcards.',
                             textAlign: TextAlign.center,
-
                             style: TextStyle(
-                              color: Colors.grey.shade500,
+                              color: grey,
                               fontSize: 13,
                               height: 1.5,
                             ),
                           )
                               .animate()
-                              .fadeIn(
-                            delay: 220.ms,
-                            duration: 400.ms,
-                          ),
+                              .fadeIn(delay: 220.ms, duration: 400.ms),
                         ],
                       ),
                     ),
                   )
-
-                // --------------------------------------------------
-                // Folder List
-                // --------------------------------------------------
-
                 else
-
                   SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                    ),
-
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     sliver: SliverList(
-                      delegate:
-                      SliverChildBuilderDelegate(
+                      delegate: SliverChildBuilderDelegate(
                             (context, index) {
-
-                          final folderData =
-                          Map<String, dynamic>.from(
+                          final folderData = Map<String, dynamic>.from(
                             folderList[index],
                           );
-
                           final String folderId =
-                              folderData['Id']
-                                  ?.toString() ??
-                                  '';
-
+                              folderData['Id']?.toString() ?? '';
                           final String folderTitle =
-                              folderData['Title']
-                                  ?.toString() ??
-                                  'Untitled';
+                              folderData['Title']?.toString() ?? 'Untitled';
+                          final cardCount = cardsBox.values.where(
+                                (item) {
+                              final card = Map<String, dynamic>.from(item);
+                              return card['FolderId']?.toString() == folderId;
+                            },
+                          ).length;
 
-                          final cardCount =
-                              cardsBox.values.where(
-                                    (item) {
-                                  final card =
-                                  Map<String, dynamic>.from(
-                                    item,
-                                  );
-
-                                  return card['FolderId']
-                                      ?.toString() ==
-                                      folderId;
-                                },
-                              ).length;
-
-                          final delay =
-                              400 + (index * 80);
+                          final delay = 400 + (index * 80);
 
                           return Container(
-                            margin: const EdgeInsets.only(
-                              bottom: 12,
-                            ),
-
-                            padding:
-                            const EdgeInsets.all(16),
-
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                              BorderRadius.circular(16),
-
+                              color: cardBackground,
+                              borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color:
-                                Colors.grey.shade200,
+                                color: lightGrey,
                               ),
                             ),
-
                             child: Row(
                               children: [
-
-                                // Folder icon
                                 Container(
-                                  padding:
-                                  const EdgeInsets.all(
-                                    10,
-                                  ),
-
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: primary
-                                        .withOpacity(0.08),
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                      12,
-                                    ),
+                                    color: primary.withOpacity(0.08),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-
                                   child: Icon(
                                     Icons.folder_open_rounded,
                                     color: primary,
                                     size: 22,
                                   ),
                                 ),
-
                                 const SizedBox(width: 14),
-
-                                // Folder information
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment
-                                        .start,
-
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-
                                       Text(
                                         folderTitle,
-
                                         maxLines: 1,
-                                        overflow:
-                                        TextOverflow.ellipsis,
-
-                                        style:
-                                        const TextStyle(
-                                          fontWeight:
-                                          FontWeight.w700,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
                                           fontSize: 15,
+                                          color: textDark,
                                         ),
                                       ),
-
                                       const SizedBox(height: 3),
-
                                       Text(
                                         '$cardCount ${cardCount == 1 ? 'card' : 'cards'}',
-
                                         style: TextStyle(
                                           fontSize: 13,
-                                          color: Colors
-                                              .grey
-                                              .shade500,
+                                          color: grey,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-
-                                Icon(
-                                  Icons
-                                      .chevron_right_rounded,
-                                  size: 20,
-                                  color:
-                                  Colors.grey.shade400,
-                                ),
                               ],
                             ),
                           )
                               .animate()
-                              .fadeIn(
-                            delay: delay.ms,
-                            duration: 400.ms,
-                          )
+                              .fadeIn(delay: delay.ms, duration: 400.ms)
                               .slideX(
                             begin: 0.06,
                             end: 0,
                             delay: delay.ms,
                             duration: 400.ms,
-                            curve:
-                            Curves.easeOutCubic,
+                            curve: Curves.easeOutCubic,
                           );
                         },
-
                         childCount: folderList.length,
                       ),
                     ),
@@ -523,22 +387,20 @@ class HomeScreen extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
+              color: textDark,
             ),
           ),
-
           const SizedBox(height: 3),
-
           Text(
             label,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.grey.shade500,
+              color: grey,
               fontWeight: FontWeight.w500,
             ),
           ),

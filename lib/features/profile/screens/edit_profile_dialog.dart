@@ -1,4 +1,5 @@
 import 'package:flash_cards/core/colors.dart';
+import 'package:flash_cards/core/custome_widgets/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +20,7 @@ Future<void> editProfileDialog(BuildContext context) {
     context: context,
     builder: (dialogContext) {
       return AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: background,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
@@ -107,7 +108,7 @@ Future<void> editProfileDialog(BuildContext context) {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: primary,
-              foregroundColor: Colors.white,
+              foregroundColor: background,
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -123,16 +124,7 @@ Future<void> editProfileDialog(BuildContext context) {
 
               Navigator.pop(dialogContext);
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: green,
-                  content: const Text(
-                    'Profile updated successfully',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              );
+              Helpers().snackBar(context, text: 'Profile updated successfully', color: green);
             },
             child: const Text('Save'),
           ),

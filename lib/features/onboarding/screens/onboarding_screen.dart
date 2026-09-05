@@ -79,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final page = pages[currentPage];
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: background,
       body: SafeArea(
         child: Column(
           children: [
@@ -96,7 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: Text(
                     'Skip',
                     style: TextStyle(
-                      color: Colors.grey.shade500,
+                      color: grey,
                       fontSize: 14,
                     ),
                   ),
@@ -152,7 +152,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onPressed: _nextPage,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primary,
-                    foregroundColor: Colors.white,
+                    foregroundColor: background,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
@@ -221,7 +221,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             data.description,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.grey.shade600,
+              color: grey,
               fontSize: 15,
               height: 1.55,
             ),
@@ -271,7 +271,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             color: primary,
             child: Icon(
               icon,
-              color: Colors.white,
+              color: background,
               size: 46,
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flash_cards/bloc/flash_card_folder_bloc.dart';
 import 'package:flash_cards/bloc/flash_cards_bloc.dart';
 import 'package:flash_cards/bloc/flash_cards_event.dart';
 import 'package:flash_cards/bloc/flash_cards_state.dart';
+import 'package:flash_cards/core/custome_widgets/helpers.dart';
 import 'package:flash_cards/models/flash_card_model.dart';
 import 'package:flash_cards/models/folder_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,7 @@ Future<void> dialogBuilderFolder(BuildContext context) {
         color: primary,
       ),
       filled: true,
-      fillColor: Colors.grey.shade100,
+      fillColor: lightGrey,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 20,
         vertical: 18,
@@ -59,7 +60,7 @@ Future<void> dialogBuilderFolder(BuildContext context) {
     context: context,
     builder: (context) {
       return AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: background,
         elevation: 15,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(28),
@@ -129,7 +130,7 @@ Future<void> dialogBuilderFolder(BuildContext context) {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primary,
-                    foregroundColor: Colors.white,
+                    foregroundColor: background,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -140,23 +141,7 @@ Future<void> dialogBuilderFolder(BuildContext context) {
                       Navigator.pop(context);
                       Folder folder=Folder(id: const Uuid().v4(), name: title.text);
                       context.read<FlashCardFolderBloc>().add(AddFlashCardFolderEvent(folder));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          content: const Center(
-                            child: Text(
-                              "Folder Created successfully",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
+                      Helpers().snackBar(context, text: "Folder Created Successfully", color: green);
                     }
                   },
                   child: const Text(

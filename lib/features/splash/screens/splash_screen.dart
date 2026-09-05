@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../home/screens/home_screen.dart';
 import '../../onboarding/screens/onboarding_screen.dart';
 import '../../../features/register/screens/register_screen.dart';
 
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (_) => const RegisterScreen(),
+          builder: (_) => const HomeScreen(),
         ),
       );
     }
