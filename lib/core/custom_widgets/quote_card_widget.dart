@@ -13,16 +13,18 @@ class QuoteCardWidget extends StatelessWidget {
   final String quote;
   final String author;
   final bool fav;
+  final Color? color;
   final void Function()? onPressedFav;
   final void Function()? onPressedNotFav;
 
-  QuoteCardWidget({
+  QuoteCardWidget( {
     super.key,
     required this.quote,
     required this.author,
     required this.fav,
     this.onPressedFav,
     this.onPressedNotFav,
+    this.color,
   });
 
   final GlobalKey _cardKey = GlobalKey();
@@ -61,7 +63,7 @@ class QuoteCardWidget extends StatelessWidget {
               alignment: AlignmentDirectional.centerStart,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: AppColors.lightBlue,
+                color: color??AppColors.lightBlue,
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Padding(

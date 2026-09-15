@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
       body: _pages[_page],
 
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: AppColors.pink,
+        backgroundColor: AppColors.lightBlue,
         color: AppColors.white,
 
         items: const [

@@ -12,6 +12,14 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardColors = [
+      AppColors.lightBlue,
+      AppColors.lightGreen,
+      AppColors.pink,
+      AppColors.purple,
+
+    ];
+
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -20,11 +28,15 @@ class FavoritesScreen extends StatelessWidget {
           child: BlocBuilder<FavoriteCubit, FavoriteState>(
             builder: (context, state) {
               if (state is FavoriteLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
 
               if (state is FavoriteError) {
-                return Center(child: Text(state.error));
+                return Center(
+                  child: Text(state.error),
+                );
               }
 
               if (state is FavoriteSuccess) {
@@ -38,11 +50,16 @@ class FavoritesScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Favourites', style: AppTextStyles.quote()),
+                        Text(
+                          'Favourites',
+                          style: AppTextStyles.quote(),
+                        ),
 
                         Text(
                           '${favorites.length} quotes',
-                          style: AppTextStyles.quote(color: AppColors.text),
+                          style: AppTextStyles.normal(
+                            color: AppColors.grey,
+                          ),
                         ),
                       ],
                     ),
@@ -52,18 +69,24 @@ class FavoritesScreen extends StatelessWidget {
                     Expanded(
                       child: ListView.separated(
                         itemCount: favorites.length,
-                        separatorBuilder: (_, __) => SizedBox(height: 15.h),
+                        separatorBuilder: (_, __) =>
+                            SizedBox(height: 15.h),
                         itemBuilder: (context, index) {
                           final quote = favorites[index];
+
+                          // Repeat the 4 colors
+                          final cardColor =
+                          cardColors[index % cardColors.length];
 
                           return QuoteCardWidget(
                             quote: quote.quote ?? '',
                             author: quote.author ?? 'Unknown',
                             fav: true,
+                            color: cardColor,
                             onPressedFav: () {
-                              context.read<FavoriteCubit>().removeFavorite(
-                                quote,
-                              );
+                              context
+                                  .read<FavoriteCubit>()
+                                  .removeFavorite(quote);
                             },
                           );
                         },
