@@ -8,13 +8,10 @@ void main() {
   late ActivityRepository repository;
 
   setUpAll(() async {
-    // Route sqflite through the FFI (desktop/test) backend instead of the
-    // platform channel implementation, which isn't available under `flutter
-    // test`. This exercises the *real* SQL, not a mock.
+
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
 
-    // Ensure each test run starts from a clean database file.
     final dbPath = await databaseFactory.getDatabasesPath();
     await databaseFactory.deleteDatabase('$dbPath/fitness_tracker.db');
 
@@ -103,9 +100,6 @@ void main() {
         dateTime: DateTime.now(),
       ),
     );
-
-    // ...then read through a brand new repository/helper reference, the way
-    // a fresh app launch would reconnect to the same on-disk database file.
     final freshRepository = ActivityRepository(databaseHelper: DatabaseHelper.instance);
     final all = (await freshRepository.getAllActivities()).data!;
     expect(all.any((a) => a.type == 'Swimming'), isTrue);

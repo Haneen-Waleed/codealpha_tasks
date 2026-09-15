@@ -9,18 +9,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sqflite: ^2.3.3+1      # local SQLite persistence (real CRUD, survives restarts)
-  path: ^1.9.0            # resolving the on-device database file path
-  provider: ^6.1.2         # single, consistent state-management approach
-  intl: ^0.19.0            # date/time formatting for history & charts
-  sqflite_common_ffi: ^2.3.4  # required at runtime on desktop (Windows/Linux/macOS),
-                               # where the sqflite plugin has no native implementation
-                               # and never auto-registers a databaseFactory
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+  provider: ^6.1.2
+  intl: ^0.19.0
+  sqflite_common_ffi: ^2.3.4
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/images/icon_adaptive.png"

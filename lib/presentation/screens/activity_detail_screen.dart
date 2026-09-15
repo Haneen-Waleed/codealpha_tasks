@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/theme/theme_provider.dart';
 import '../../data/models/activity.dart';
 import '../../state/fitness_provider.dart';
 import '../widgets/activity_tile.dart';
@@ -14,27 +15,42 @@ class ActivityDetailScreen extends StatelessWidget {
 
   const ActivityDetailScreen({super.key, required this.activity});
 
-  Widget _row(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: AppTextStyles.bodyMuted),
-          Text(value, style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600)),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeProvider>();
+
+    Widget buildRow(String label, String value) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: AppTextStyles.bodyMuted.copyWith(color: AppColors.textSecondary),
+            ),
+            Text(
+              value,
+              style: AppTextStyles.body.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColors.white,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
+      backgroundColor: AppColors.bg,
       appBar: AppBar(
+        backgroundColor: AppColors.bg,
+        foregroundColor: AppColors.white,
+        elevation: 0,
         title: const Text('Activity Details'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_outlined),
+            icon: Icon(Icons.edit_outlined, color: AppColors.white),
             tooltip: 'Edit',
             onPressed: () async {
               await Navigator.of(context).push(
@@ -46,7 +62,7 @@ class ActivityDetailScreen extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline, color: AppColors.errorRed),
+            icon: const Icon(Icons.delete_outline, color: AppColors.error),
             tooltip: 'Delete',
             onPressed: () async {
               final confirmed = await showConfirmDeleteDialog(
@@ -62,7 +78,13 @@ class ActivityDetailScreen extends StatelessWidget {
               if (!context.mounted) return;
               if (success) Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(feedback ?? 'Done.')),
+                SnackBar(
+                  backgroundColor: AppColors.card,
+                  content: Text(
+                    feedback ?? 'Done.',
+                    style: TextStyle(color: AppColors.white),
+                  ),
+                ),
               );
             },
           ),
@@ -75,27 +97,30 @@ class ActivityDetailScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: AppColors.card,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.divider),
+                border: Border.all(color: AppColors.border),
               ),
               child: Row(
                 children: [
                   Container(
                     width: 48,
                     height: 48,
-                    decoration: const BoxDecoration(
-                      color: AppColors.lavender,
+                    decoration: BoxDecoration(
+                      color: AppColors.neon.withOpacity(0.15),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       iconForWorkoutType(activity.type),
-                      color: AppColors.deepTeal,
+                      color: AppColors.neon,
                     ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
-                    child: Text(activity.type, style: AppTextStyles.title),
+                    child: Text(
+                      activity.type,
+                      style: AppTextStyles.title.copyWith(color: AppColors.white),
+                    ),
                   ),
                 ],
               ),
@@ -104,22 +129,22 @@ class ActivityDetailScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: AppColors.card,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.divider),
+                border: Border.all(color: AppColors.border),
               ),
               child: Column(
                 children: [
-                  _row('Date', DateFormat('EEEE, MMM d, yyyy').format(activity.dateTime)),
-                  const Divider(),
-                  _row('Time', DateFormat('h:mm a').format(activity.dateTime)),
-                  const Divider(),
-                  _row('Duration', '${activity.durationMinutes} minutes'),
-                  const Divider(),
-                  _row('Calories burned', '${activity.caloriesBurned} kcal'),
+                  buildRow('Date', DateFormat('EEEE, MMM d, yyyy').format(activity.dateTime)),
+                  Divider(color: AppColors.border),
+                  buildRow('Time', DateFormat('h:mm a').format(activity.dateTime)),
+                  Divider(color: AppColors.border),
+                  buildRow('Duration', '${activity.durationMinutes} minutes'),
+                  Divider(color: AppColors.border),
+                  buildRow('Calories burned', '${activity.caloriesBurned} kcal'),
                   if (activity.steps > 0) ...[
-                    const Divider(),
-                    _row('Steps', '${activity.steps}'),
+                    Divider(color: AppColors.border),
+                    buildRow('Steps', '${activity.steps}'),
                   ],
                 ],
               ),
@@ -130,16 +155,22 @@ class ActivityDetailScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: AppColors.card,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.divider),
+                  border: Border.all(color: AppColors.border),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Notes', style: AppTextStyles.statLabel),
+                    Text(
+                      'Notes',
+                      style: AppTextStyles.statLabel.copyWith(color: AppColors.textSecondary),
+                    ),
                     const SizedBox(height: 6),
-                    Text(activity.notes!, style: AppTextStyles.body),
+                    Text(
+                      activity.notes!,
+                      style: AppTextStyles.body.copyWith(color: AppColors.white),
+                    ),
                   ],
                 ),
               ),

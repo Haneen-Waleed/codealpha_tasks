@@ -1,5 +1,3 @@
-/// A single logged fitness activity. `id` is null until it has been
-/// inserted into SQLite, at which point the row id is assigned back.
 class Activity {
   final int? id;
   final String type;
@@ -63,10 +61,6 @@ class Activity {
     );
   }
 }
-
-/// Validates raw form input and returns a human-readable error, or null if
-/// the value is valid. Kept outside the model so screens can call it
-/// field-by-field as the user types, without constructing an Activity yet.
 class ActivityValidator {
   ActivityValidator._();
 
@@ -112,7 +106,6 @@ class ActivityValidator {
   }
 
   static String? validateSteps(String? value) {
-    // Steps are optional; only validate if the user actually entered one.
     if (value == null || value.trim().isEmpty) {
       return null;
     }

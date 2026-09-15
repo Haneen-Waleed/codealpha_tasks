@@ -47,7 +47,7 @@ class WeeklyBarChart extends StatelessWidget {
                       value >= 1000
                           ? '${(value / 1000).toStringAsFixed(1)}k'
                           : '$value',
-                      style: AppTextStyles.caption,
+                      style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
                     ),
                   const SizedBox(height: 4),
                   ClipRRect(
@@ -60,8 +60,8 @@ class WeeklyBarChart extends StatelessWidget {
                         height: 96 * animatedFraction.clamp(0.02, 1.0),
                         width: double.infinity,
                         color: isToday
-                            ? AppColors.deepTeal
-                            : AppColors.deepTeal.withOpacity(0.35),
+                            ? AppColors.neon
+                            : AppColors.neon.withOpacity(0.35),
                       ),
                     ),
                   ),
@@ -70,7 +70,7 @@ class WeeklyBarChart extends StatelessWidget {
                     DateFormat('E').format(day.date).substring(0, 1),
                     style: AppTextStyles.caption.copyWith(
                       fontWeight: isToday ? FontWeight.w700 : FontWeight.w400,
-                      color: isToday ? AppColors.deepTeal : AppColors.secondaryText,
+                      color: isToday ? AppColors.neon : AppColors.textMuted,
                     ),
                   ),
                 ],

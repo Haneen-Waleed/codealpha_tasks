@@ -33,9 +33,9 @@ class GoalProgressRing extends StatelessWidget {
               builder: (context, value, _) => CircularProgressIndicator(
                 value: value,
                 strokeWidth: 10,
-                backgroundColor: AppColors.lavender,
+                backgroundColor: AppColors.surface2,
                 valueColor:
-                    const AlwaysStoppedAnimation<Color>(AppColors.bananaCream),
+                const AlwaysStoppedAnimation<Color>(AppColors.neon),
                 strokeCap: StrokeCap.round,
               ),
             ),
@@ -43,8 +43,14 @@ class GoalProgressRing extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(centerLabel, style: AppTextStyles.title),
-              Text(subLabel, style: AppTextStyles.caption),
+              Text(
+                centerLabel,
+                style: AppTextStyles.title.copyWith(color: AppColors.white),
+              ),
+              Text(
+                subLabel,
+                style: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
+              ),
             ],
           ),
         ],

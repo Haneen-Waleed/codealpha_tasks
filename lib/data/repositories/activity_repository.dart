@@ -2,8 +2,7 @@ import 'dart:developer' as developer;
 import '../database/database_helper.dart';
 import '../models/activity.dart';
 
-/// A typed result wrapper so the state layer never has to guess whether a
-/// repository call succeeded — no exceptions leak up to the UI.
+/// repository call succeeded so no exceptions leak up to the UI
 class RepositoryResult<T> {
   final T? data;
   final String? error;

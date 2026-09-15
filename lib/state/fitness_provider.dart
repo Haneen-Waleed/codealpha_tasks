@@ -4,9 +4,6 @@ import '../data/repositories/activity_repository.dart';
 
 enum LoadStatus { loading, loaded, error }
 
-/// The single source of truth for activity + goal data in the UI layer.
-/// Screens read from this via Provider/Consumer and never touch the
-/// repository or database directly.
 class FitnessProvider extends ChangeNotifier {
   final ActivityRepository _repository;
 
@@ -32,8 +29,6 @@ class FitnessProvider extends ChangeNotifier {
   int get goalDurationMinutes => _goalDurationMinutes;
   int get goalWorkouts => _goalWorkouts;
 
-  /// Transient message for one-off feedback (e.g. "Activity saved"),
-  /// consumed and cleared by the UI after it shows a SnackBar.
   String? _feedback;
   String? consumeFeedback() {
     final msg = _feedback;
@@ -134,7 +129,6 @@ class FitnessProvider extends ChangeNotifier {
     return true;
   }
 
-  // ---------------- Derived stats (all computed from real data) ----------------
 
   bool _isSameDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
@@ -171,7 +165,6 @@ class FitnessProvider extends ChangeNotifier {
       ? 0
       : (todayWorkoutCount / _goalWorkouts).clamp(0, 1).toDouble();
 
-  /// Overall daily progress, averaged across the four goal dimensions.
   double get overallDailyProgress {
     final values = [
       stepsProgress,
@@ -188,9 +181,6 @@ class FitnessProvider extends ChangeNotifier {
     return sorted.take(5).toList();
   }
 
-  /// Last 7 days (oldest to newest) with per-day totals, for the weekly
-  /// chart and weekly summary. Days with no activities show a real zero,
-  /// not a fabricated value.
   List<DailyTotal> get weeklyTotals {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);

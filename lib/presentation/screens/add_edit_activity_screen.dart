@@ -64,12 +64,38 @@ class _AddEditActivityScreenState extends State<AddEditActivityScreen> {
       initialDate: _selectedDateTime,
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme:  ColorScheme.dark(
+              primary: AppColors.neon,
+              onPrimary: AppColors.card,
+              surface: AppColors.card,
+              onSurface: AppColors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (date == null || !mounted) return;
 
     final time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(_selectedDateTime),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme:  ColorScheme.dark(
+              primary: AppColors.neon,
+              onPrimary: AppColors.card,
+              surface: AppColors.card,
+              onSurface: AppColors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (time == null) return;
 
@@ -82,6 +108,31 @@ class _AddEditActivityScreenState extends State<AddEditActivityScreen> {
         time.minute,
       );
     });
+  }
+
+  InputDecoration _inputDecoration({String? hintText}) {
+    return InputDecoration(
+      filled: true,
+      fillColor: AppColors.card,
+      hintText: hintText,
+      hintStyle:  TextStyle(color: AppColors.textMuted),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide:  BorderSide(color: AppColors.border),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide:  BorderSide(color: AppColors.border),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: AppColors.neon),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: AppColors.error),
+      ),
+    );
   }
 
   Future<void> _save() async {
@@ -117,11 +168,23 @@ class _AddEditActivityScreenState extends State<AddEditActivityScreen> {
     if (success) {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(feedback ?? 'Saved.')),
+        SnackBar(
+          backgroundColor: AppColors.card,
+          content: Text(
+            feedback ?? 'Saved.',
+            style:  TextStyle(color: AppColors.white),
+          ),
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(feedback ?? 'Could not save. Please try again.')),
+        SnackBar(
+          backgroundColor: AppColors.card,
+          content: Text(
+            feedback ?? 'Could not save. Please try again.',
+            style: const TextStyle(color: AppColors.error),
+          ),
+        ),
       );
     }
   }
@@ -132,7 +195,11 @@ class _AddEditActivityScreenState extends State<AddEditActivityScreen> {
         _stepsController.text.isNotEmpty;
 
     return Scaffold(
+      backgroundColor: AppColors.bg,
       appBar: AppBar(
+        backgroundColor: AppColors.bg,
+        foregroundColor: AppColors.white,
+        elevation: 0,
         title: Text(_isEditing ? 'Edit Activity' : 'Add Activity'),
       ),
       body: SafeArea(
@@ -141,12 +208,21 @@ class _AddEditActivityScreenState extends State<AddEditActivityScreen> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
             children: [
-              const Text('Workout type', style: AppTextStyles.bodyMuted),
+              Text(
+                'Workout type',
+                style: AppTextStyles.bodyMuted.copyWith(color: AppColors.textSecondary),
+              ),
               const SizedBox(height: 6),
               DropdownButtonFormField<String>(
                 value: _selectedType,
+                dropdownColor: AppColors.card,
+                style:  TextStyle(color: AppColors.white),
+                decoration: _inputDecoration(),
                 items: WorkoutTypes.all
-                    .map((t) => DropdownMenuItem(value: t, child: Text(t)))
+                    .map((t) => DropdownMenuItem(
+                  value: t,
+                  child: Text(t, style:  TextStyle(color: AppColors.white)),
+                ))
                     .toList(),
                 onChanged: (value) {
                   if (value == null) return;
@@ -156,62 +232,77 @@ class _AddEditActivityScreenState extends State<AddEditActivityScreen> {
               ),
               const SizedBox(height: 18),
 
-              const Text('Duration (minutes)', style: AppTextStyles.bodyMuted),
+              Text(
+                'Duration (minutes)',
+                style: AppTextStyles.bodyMuted.copyWith(color: AppColors.textSecondary),
+              ),
               const SizedBox(height: 6),
               TextFormField(
                 controller: _durationController,
+                style:  TextStyle(color: AppColors.white),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(hintText: 'e.g. 30'),
+                decoration: _inputDecoration(hintText: 'e.g. 30'),
                 validator: ActivityValidator.validateDuration,
               ),
               const SizedBox(height: 18),
 
-              const Text('Calories burned', style: AppTextStyles.bodyMuted),
+              Text(
+                'Calories burned',
+                style: AppTextStyles.bodyMuted.copyWith(color: AppColors.textSecondary),
+              ),
               const SizedBox(height: 6),
               TextFormField(
                 controller: _caloriesController,
+                style:  TextStyle(color: AppColors.white),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(hintText: 'e.g. 250'),
+                decoration: _inputDecoration(hintText: 'e.g. 250'),
                 validator: ActivityValidator.validateCalories,
               ),
               const SizedBox(height: 18),
 
               if (showSteps) ...[
-                const Text('Steps (optional)', style: AppTextStyles.bodyMuted),
+                Text(
+                  'Steps (optional)',
+                  style: AppTextStyles.bodyMuted.copyWith(color: AppColors.textSecondary),
+                ),
                 const SizedBox(height: 6),
                 TextFormField(
                   controller: _stepsController,
+                  style:  TextStyle(color: AppColors.white),
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: const InputDecoration(hintText: 'e.g. 4000'),
+                  decoration: _inputDecoration(hintText: 'e.g. 4000'),
                   validator: ActivityValidator.validateSteps,
                 ),
                 const SizedBox(height: 18),
               ],
 
-              const Text('Date & time', style: AppTextStyles.bodyMuted),
+              Text(
+                'Date & time',
+                style: AppTextStyles.bodyMuted.copyWith(color: AppColors.textSecondary),
+              ),
               const SizedBox(height: 6),
               InkWell(
                 onTap: _pickDateTime,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceWhite,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.divider),
+                    color: AppColors.card,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: AppColors.border),
                   ),
                   child: Row(
                     children: [
                       const Icon(Icons.calendar_today_outlined,
-                          size: 18, color: AppColors.deepTeal),
+                          size: 18, color: AppColors.neon),
                       const SizedBox(width: 10),
                       Text(
                         DateFormat('EEE, MMM d, yyyy · h:mm a')
                             .format(_selectedDateTime),
-                        style: AppTextStyles.body,
+                        style: AppTextStyles.body.copyWith(color: AppColors.white),
                       ),
                     ],
                   ),
@@ -219,30 +310,45 @@ class _AddEditActivityScreenState extends State<AddEditActivityScreen> {
               ),
               const SizedBox(height: 18),
 
-              const Text('Notes (optional)', style: AppTextStyles.bodyMuted),
+              Text(
+                'Notes (optional)',
+                style: AppTextStyles.bodyMuted.copyWith(color: AppColors.textSecondary),
+              ),
               const SizedBox(height: 6),
               TextFormField(
                 controller: _notesController,
+                style:  TextStyle(color: AppColors.white),
                 maxLines: 3,
                 maxLength: 200,
-                decoration: const InputDecoration(
+                decoration: _inputDecoration(
                   hintText: 'Anything worth remembering about this session',
                 ),
               ),
               const SizedBox(height: 12),
 
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.neon,
+                  foregroundColor: AppColors.bg,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
                 onPressed: _isSaving ? null : _save,
                 child: _isSaving
-                    ? const SizedBox(
-                        height: 18,
-                        width: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: AppColors.surfaceWhite,
-                        ),
-                      )
-                    : Text(_isEditing ? 'Save Changes' : 'Save Activity'),
+                    ?  SizedBox(
+                  height: 18,
+                  width: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.bg,
+                  ),
+                )
+                    : Text(
+                  _isEditing ? 'Save Changes' : 'Save Activity',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),

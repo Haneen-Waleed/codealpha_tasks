@@ -22,7 +22,7 @@ void main() {
         repository: ActivityRepository(databaseHelper: DatabaseHelper.instance),
       )..initialize(),
       child: MaterialApp(
-        theme: AppTheme.light,
+        theme: AppTheme.dark,
         home: const MainNavigation(),
       ),
     );

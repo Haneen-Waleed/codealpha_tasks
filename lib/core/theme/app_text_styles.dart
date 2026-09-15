@@ -1,71 +1,69 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
-/// A small, deliberate type scale. Every screen pulls from here instead of
-/// inventing one-off font sizes, so the app reads as consistently designed.
 class AppTextStyles {
   AppTextStyles._();
 
   static const String fontFamily = 'Roboto';
 
-  static const TextStyle headline = TextStyle(
+  static TextStyle get headline => TextStyle(
     fontFamily: fontFamily,
     fontSize: 26,
     fontWeight: FontWeight.w700,
-    color: AppColors.primaryText,
+    color: AppColors.white,
     height: 1.2,
   );
 
-  static const TextStyle title = TextStyle(
+  static TextStyle get title => TextStyle(
     fontFamily: fontFamily,
     fontSize: 18,
     fontWeight: FontWeight.w600,
-    color: AppColors.primaryText,
+    color: AppColors.white,
     height: 1.3,
   );
 
-  static const TextStyle body = TextStyle(
+  static TextStyle get body => TextStyle(
     fontFamily: fontFamily,
     fontSize: 15,
     fontWeight: FontWeight.w400,
-    color: AppColors.primaryText,
+    color: AppColors.white,
     height: 1.4,
   );
 
-  static const TextStyle bodyMuted = TextStyle(
+  static TextStyle get bodyMuted => TextStyle(
     fontFamily: fontFamily,
     fontSize: 14,
     fontWeight: FontWeight.w400,
-    color: AppColors.secondaryText,
+    color: AppColors.textSecondary,
     height: 1.4,
   );
 
-  static const TextStyle statValue = TextStyle(
+  static TextStyle get statValue => TextStyle(
     fontFamily: fontFamily,
     fontSize: 24,
     fontWeight: FontWeight.w700,
-    color: AppColors.primaryText,
+    color: AppColors.white,
   );
 
-  static const TextStyle statLabel = TextStyle(
+  static TextStyle get statLabel => TextStyle(
     fontFamily: fontFamily,
     fontSize: 12,
     fontWeight: FontWeight.w500,
-    color: AppColors.secondaryText,
+    color: AppColors.textSecondary,
     letterSpacing: 0.2,
   );
 
-  static const TextStyle caption = TextStyle(
+  static TextStyle get caption => TextStyle(
     fontFamily: fontFamily,
     fontSize: 12,
     fontWeight: FontWeight.w400,
-    color: AppColors.secondaryText,
+    color: AppColors.textMuted,
   );
 
-  static const TextStyle buttonLabel = TextStyle(
+  static TextStyle get buttonLabel => TextStyle(
     fontFamily: fontFamily,
     fontSize: 15,
     fontWeight: FontWeight.w600,
-    color: AppColors.surfaceWhite,
+    color: AppColors.bg,
   );
 }

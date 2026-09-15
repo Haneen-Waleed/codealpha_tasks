@@ -3,9 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import '../models/activity.dart';
 import '../../core/constants/app_constants.dart';
 
-/// Thin wrapper around a single sqflite database connection. Everything
-/// else in the data layer (repositories) talks to the database through
-/// this class rather than opening its own connection.
+/// this class rather than opening its own connection
 class DatabaseHelper {
   DatabaseHelper._internal();
   static final DatabaseHelper instance = DatabaseHelper._internal();
@@ -52,7 +50,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Seed the single goals row so the app never has to special-case
     // "no goals set yet" anywhere in the UI.
     await db.insert('goals', {
       'id': 1,

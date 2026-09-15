@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../core/theme/app_colors.dart';
 import '../../state/fitness_provider.dart';
 import '../widgets/activity_tile.dart';
 import '../widgets/empty_state.dart';
@@ -12,12 +14,20 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('History')),
+      backgroundColor: AppColors.bg,
+      appBar: AppBar(
+        backgroundColor: AppColors.bg,
+        foregroundColor: AppColors.white,
+        elevation: 0,
+        title: const Text('History'),
+      ),
       body: SafeArea(
         child: Consumer<FitnessProvider>(
           builder: (context, provider, _) {
             if (provider.status == LoadStatus.loading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.neon),
+              );
             }
             if (provider.status == LoadStatus.error) {
               return Center(
@@ -35,6 +45,10 @@ class HistoryScreen extends StatelessWidget {
                   title: 'Nothing recorded yet',
                   message: 'Activities you log will show up here.',
                   action: FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.neon,
+                      foregroundColor: AppColors.bg,
+                    ),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(

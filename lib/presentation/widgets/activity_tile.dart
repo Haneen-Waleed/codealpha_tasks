@@ -41,22 +41,22 @@ class ActivityTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.card,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.divider),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           children: [
             Container(
               width: 42,
               height: 42,
-              decoration: const BoxDecoration(
-                color: AppColors.lavender,
+              decoration: BoxDecoration(
+                color: AppColors.neon.withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 iconForWorkoutType(activity.type),
-                color: AppColors.deepTeal,
+                color: AppColors.neon,
                 size: 20,
               ),
             ),
@@ -65,23 +65,36 @@ class ActivityTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(activity.type, style: AppTextStyles.body.copyWith(
-                    fontWeight: FontWeight.w600,
-                  )),
+                  Text(
+                    activity.type,
+                    style: AppTextStyles.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.white,
+                    ),
+                  ),
                   const SizedBox(height: 2),
-                  Text(dateLabel, style: AppTextStyles.caption),
+                  Text(
+                    dateLabel,
+                    style: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
+                  ),
                 ],
               ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text('${activity.durationMinutes} min', style: AppTextStyles.bodyMuted),
-                Text('${activity.caloriesBurned} kcal', style: AppTextStyles.caption),
+                Text(
+                  '${activity.durationMinutes} min',
+                  style: AppTextStyles.bodyMuted.copyWith(color: AppColors.textSecondary),
+                ),
+                Text(
+                  '${activity.caloriesBurned} kcal',
+                  style: AppTextStyles.caption.copyWith(color: AppColors.textMuted),
+                ),
               ],
             ),
             const SizedBox(width: 6),
-            const Icon(Icons.chevron_right, color: AppColors.midGray, size: 20),
+             Icon(Icons.chevron_right, color: AppColors.textMuted, size: 20),
           ],
         ),
       ),

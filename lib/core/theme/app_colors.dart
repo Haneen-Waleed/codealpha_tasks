@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
-
-/// Central palette. Use these names, not raw hex codes, everywhere else
-/// in the app so the palette stays easy to audit and restrained.
 class AppColors {
   AppColors._();
 
-  static const Color inkBlack = Color(0xFF011C27);
-  static const Color bananaCream = Color(0xFFFFF07C);
-  static const Color deepTeal = Color(0xFF4E6E5D);
-  static const Color lavender = Color(0xFFE9EBF8);
-  static const Color mauveShadow = Color(0xFF563440);
+  /// State flag updated by [ThemeProvider] when toggled.
+  static bool isDark = true;
 
-  // Supporting neutrals for contrast/readability. Not part of the brand
-  // five, used only where pure brand colors would fail accessibility.
-  static const Color offWhite = Color(0xFFFBFBFD);
-  static const Color surfaceWhite = Color(0xFFFFFFFF);
-  static const Color lightGray = Color(0xFFC9CDD6);
-  static const Color midGray = Color(0xFF7C8590);
-  static const Color errorRed = Color(0xFFB3261E);
+  static const Color neon = Color(0xFFFBA912);
+  static const Color neonLight = Color(0xFFFFC44D);
+  static const Color neonDark = Color(0xFFD88900);
 
-  // Semantic aliases so screens read intent, not raw color names.
-  static const Color background = lavender;
-  static const Color surface = surfaceWhite;
-  static const Color primaryAction = deepTeal;
-  static const Color primaryText = inkBlack;
-  static const Color secondaryText = midGray;
-  static const Color highlight = bananaCream;
-  static const Color secondaryAccent = mauveShadow;
-  static const Color divider = lightGray;
+  static const Color success = Color(0xFF35D07F);
+  static const Color error = Color(0xFFFF4D4D);
+  static const Color info = Color(0xFF4DA6FF);
+
+  static Color get bg =>
+      isDark ? const Color(0xFF141414) : const Color(0xFFF5F5F7);
+
+  static Color get surface2 =>
+      isDark ? const Color(0xFF1E1E1E) : const Color(0xFFE5E5EA);
+
+  static Color get card =>
+      isDark ? const Color(0xFF242424) : const Color(0xFFFFFFFF);
+
+  static Color get white =>
+      isDark ? const Color(0xFFF5F5F5) : const Color(0xFF1C1C1E);
+
+  static Color get textSecondary =>
+      isDark ? const Color(0xFFA6A6A6) : const Color(0xFF6E6E73);
+
+  static Color get textMuted =>
+      isDark ? const Color(0xFF6F6F6F) : const Color(0xFFA1A1A6);
+
+  static Color get border =>
+      isDark ? const Color(0xFF333333) : const Color(0xFFE5E5EA);
 }
