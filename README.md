@@ -174,12 +174,12 @@ Minimalism was also one of the project requirements.
 
 ## 🖼️ Screenshots
 
-### Onboarding
+### Onboarding and Splash
 
 <p align="center">
-  <img src="screenshots/onboarding_1.png" width="250"/>
-  <img src="screenshots/onboarding_2.png" width="250"/>
-  <img src="screenshots/onboarding_3.png" width="250"/>
+  <img src="screenshots/onboarding.png" width="250"/>
+  <img src="screenshots/splash.png" width="250"/>
+
 </p>
 
 ### 🌙 Dark Mode
@@ -189,6 +189,9 @@ Minimalism was also one of the project requirements.
   <img src="screenshots/history_dark.png" width="250"/>
   <img src="screenshots/progress_dark.png" width="250"/>
   <img src="screenshots/settings_dark.png" width="250"/>
+  <img src="screenshots/activity_add_or_edit_dark.png" width="250"/>
+  <img src="screenshots/activity_details_dark.png" width="250"/>
+
 </p>
 
 ### ☀️ Light Mode
@@ -198,6 +201,7 @@ Minimalism was also one of the project requirements.
   <img src="screenshots/history_light.png" width="250"/>
   <img src="screenshots/progress_light.png" width="250"/>
   <img src="screenshots/settings_light.png" width="250"/>
+  <img src="screenshots/activity_details_light.png" width="250"/>
 </p>
 
 > Place the screenshots inside the `screenshots/` folder using the filenames above.
